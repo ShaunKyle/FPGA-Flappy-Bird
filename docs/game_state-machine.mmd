@@ -1,0 +1,19 @@
+stateDiagram
+    [*] --> Start
+    %%Background/pipes etc start moving
+
+    Start --> notjump
+    notjump --> jump : btn
+    jump --> notjump : x time
+
+    notjump --> collide
+    jump --> collide
+
+    collide --> Start
+    collide --> Ded
+
+    jump
+
+    notjump
+
+    collide
