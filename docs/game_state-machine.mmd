@@ -9,8 +9,10 @@ stateDiagram
     fall --> collide : pipe/ground hit
     jump --> collide : pipe/ground hit
     jump --> win : all pipes crossed
-    fall --> win : all pipes crossed
+    fall --> win
 
     collide --> start : lives left
-    collide --> Dead : out of lives
-   
+    collide --> dead : out of lives
+
+    win --> [*]
+    dead --> [*]
