@@ -2,12 +2,13 @@ stateDiagram
     [*] --> Menu : Power on
     Menu --> Training
     Menu --> Start_Game
-    Menu --> Hi_score_view
+    Menu --> Hi_score_view 
 
     Training --> Menu : Die
+    Training --> Menu : Reset
 
 
-    Start_Game --> Level_1 : Delay
+    Start_Game --> Level_1 : Delay / Press mouse btn to start
     Level_1 --> Level_2 : Win
     Level_2 --> Level_3 : Win
     
