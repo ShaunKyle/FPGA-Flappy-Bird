@@ -17,6 +17,12 @@ stateDiagram
     Level_2 --> Hi_score_input : Die
     Level_3 --> Hi_score_input : Die/Win
 
+    Level_1 --> Paused : pause_btn
+    Paused --> Level_1  : pause_btn
+    Level_2 --> Paused : pause_btn
+    Paused --> Level_2  : pause_btn
+    Level_3 --> Paused : pause_btn
+    Paused --> Level_3  : pause_btn
     Hi_score_input --> Hi_score_view
 
     Hi_score_view --> Menu
