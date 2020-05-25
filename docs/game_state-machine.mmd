@@ -1,19 +1,18 @@
 stateDiagram
-    [*] --> Start
+    [*] --> start
     %%Background/pipes etc start moving
 
-    Start --> notjump
-    notjump --> jump : btn
-    jump --> notjump : x time
+    start --> fall
+    fall --> jump : btn
+    jump --> fall : x time
 
-    notjump --> collide
-    jump --> collide
+    fall --> collide : pipe/ground hit
+    jump --> collide : pipe/ground hit
+    jump --> win : all pipes crossed
+    fall --> win
 
-    collide --> Start
-    collide --> Ded
+    collide --> start : lives left
+    collide --> dead : out of lives
 
-    jump
-
-    notjump
-
-    collide
+    win --> [*]
+    dead --> [*]
