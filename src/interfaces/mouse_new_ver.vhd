@@ -6,22 +6,22 @@ USE  IEEE.STD_LOGIC_1164.all;
 USE  IEEE.STD_LOGIC_ARITH.all;
 USE  IEEE.STD_LOGIC_UNSIGNED.all;
 
-ENTITY MOUSE IS
+ENTITY MOUSE_NEW_VER IS
    PORT( clock_25Mhz, reset 			: IN std_logic;
         SIGNAL mouse_data				: INOUT std_logic;
         SIGNAL mouse_clk 				: INOUT std_logic;
         SIGNAL left_button, right_button: OUT std_logic;
 		SIGNAL mouse_cursor_row 		: OUT std_logic_vector(9 DOWNTO 0); 
 		SIGNAL mouse_cursor_column 		: OUT std_logic_vector(9 DOWNTO 0));       	
-END MOUSE;
+END MOUSE_NEW_VER;
 
-ARCHITECTURE behavior OF MOUSE IS
+ARCHITECTURE behavior OF MOUSE_NEW_VER IS
 
 TYPE STATE_TYPE IS (INHIBIT_TRANS, LOAD_COMMAND,LOAD_COMMAND2, WAIT_OUTPUT_READY,
 					WAIT_CMD_ACK, INPUT_PACKETS);
 -- Signals for Mouse
 SIGNAL mouse_state							: state_type;
-SIGNAL inhibit_wait_count					: std_logic_vector(10 DOWNTO 0);
+SIGNAL inhibit_wait_count					: std_logic_vector(11 DOWNTO 0);
 SIGNAL CHARIN, CHAROUT						: std_logic_vector(7 DOWNTO 0);
 SIGNAL new_cursor_row, new_cursor_column 	: std_logic_vector(9 DOWNTO 0);
 SIGNAL cursor_row, cursor_column 			: std_logic_vector(9 DOWNTO 0);
@@ -54,7 +54,7 @@ MOUSE_CLK <=  'Z' WHEN MOUSE_CLK_DIR = '0' ELSE MOUSE_CLK_BUF;
 	BEGIN
 		IF reset = '1' THEN
 			mouse_state <= INHIBIT_TRANS;
-			inhibit_wait_count <= conv_std_logic_vector(0,11);
+			inhibit_wait_count <= conv_std_logic_vector(0,12);
 			SEND_DATA <= '0';
 		ELSIF clock_25Mhz'EVENT AND clock_25Mhz = '1' THEN
 			CASE mouse_state IS
@@ -64,7 +64,7 @@ MOUSE_CLK <=  'Z' WHEN MOUSE_CLK_DIR = '0' ELSE MOUSE_CLK_BUF;
 -- Note: This is perhaps optional since mouse should not be tranmitting
 				WHEN INHIBIT_TRANS =>
 				inhibit_wait_count <= inhibit_wait_count + 1;
-				IF inhibit_wait_count(10 DOWNTO 9) = "11" THEN
+				IF inhibit_wait_count(11 DOWNTO 10) = "11" THEN
 						mouse_state <= LOAD_COMMAND;
 				END IF;
 					-- Enable Streaming Mode Command, F4
@@ -194,7 +194,7 @@ IF RESET='1' THEN
     LEFT_BUTTON <= '0';
     RIGHT_BUTTON <= '0';
 	CHARIN <= "00000000";
-ELSIF MOUSE_CLK_FILTER'event and MOUSE_CLK_FILTER='1' THEN
+ELSIF MOUSE_CLK_FILTER'event and MOUSE_CLK_FILTER='0' THEN
 	IF MOUSE_DATA_DIR='0' THEN
  		IF MOUSE_DATA='0' AND READ_CHAR='0' THEN
 			READ_CHAR<= '1';
