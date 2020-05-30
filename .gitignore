@@ -1,7 +1,4 @@
 
-src/VGA_text/out_directory_tmp.txt.tmp
-src/VGA_text/incremental_db/compiled_partitions/Part1.db_info
-src/VGA_text/db/VGA_text.quiproj.4388.rdr.flock
-src/VGA_text/db/Part1.restore.qmsg
-src/VGA_text/db/Part1.db_info
-src/VGA_text/db/Part1.cmp.rdb
+Quartus/
+
+temp/
