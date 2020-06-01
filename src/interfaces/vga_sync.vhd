@@ -5,14 +5,16 @@ use  IEEE.STD_LOGIC_ARITH.all;
 use  IEEE.STD_LOGIC_UNSIGNED.all;
 
 ENTITY VGA_SYNC IS
-	PORT(	clock_25Mhz, red, green, blue		: IN	STD_LOGIC;
-			red_out, green_out, blue_out, horiz_sync_out, vert_sync_out	: OUT	STD_LOGIC;
+	PORT(	clock_25Mhz				: IN STD_LOGIC;
+			red, green, blue		: IN STD_LOGIC_VECTOR(3 downto 0);
+			red_out, green_out, blue_out : OUT STD_LOGIC_VECTOR(3 downto 0);
+			horiz_sync_out, vert_sync_out	: OUT	STD_LOGIC;
 			pixel_row, pixel_column: OUT STD_LOGIC_VECTOR(9 DOWNTO 0));
 END VGA_SYNC;
 
 ARCHITECTURE a OF VGA_SYNC IS
 	SIGNAL horiz_sync, vert_sync : STD_LOGIC;
-	SIGNAL video_on, video_on_v, video_on_h : STD_LOGIC;
+	SIGNAL video_on, video_on_v, video_on_h : STD_LOGIC_VECTOR(3 downto 0);
 	SIGNAL h_count, v_count :STD_LOGIC_VECTOR(9 DOWNTO 0);
 
 BEGIN
@@ -65,17 +67,17 @@ BEGIN
 
 -- Generate Video on Screen Signals for Pixel Data
 	IF (h_count <= 639) THEN
-   		video_on_h <= '1';
+   		video_on_h <= "1111";
    		pixel_column <= h_count;
 	ELSE
-	   	video_on_h <= '0';
+	   	video_on_h <= "0000";
 	END IF;
 
 	IF (v_count <= 479) THEN
-   		video_on_v <= '1';
+   		video_on_v <= "1111";
    		pixel_row <= v_count;
 	ELSE
-   		video_on_v <= '0';
+   		video_on_v <= "0000";
 	END IF;
 
 -- Put all video signals through DFFs to elminate any delays that cause a blurry image
