@@ -30,6 +30,8 @@ architecture structure of FLAPPY_GAME is
 
   --VGA
   signal r,g,b : std_logic_vector(3 downto 0);
+  signal r_menu,g_menu,b_menu : std_logic_vector(3 downto 0);
+  signal r_game,g_game,b_game : std_logic_vector(3 downto 0);
   signal row,column : std_logic_vector(9 downto 0);
   signal vert_sync, horiz_sync : std_logic;
 
@@ -84,15 +86,28 @@ begin
   
 
   --
+  -- Screen multiplexer
+  --
+  r <= 
+    r_game when (false) else
+    r_menu;
+  g <= 
+    g_game when (false) else
+    g_menu;
+  b <= 
+    b_game when (false) else
+    b_menu;
+
+  --
   -- Game
   --
 
-  inst_Display_Controller: entity work.display_controller PORT MAP (
+  inst_Display_Game: entity work.display_controller PORT MAP (
     clk_25,
     bird_height,
     pipe_pos,pipe_height,
     row,column,
-    r,g,b
+    r_game,g_game,b_game
   );
 
   object_Bird: entity work.bird PORT MAP (
@@ -122,8 +137,14 @@ begin
 
   
   --
-  -- Objects
+  -- Menu
   --
+
+  inst_Display_Menu: entity work.display_menu PORT MAP (
+    clk_25,row,column,
+    mouse_col,mouse_row,
+    r_menu,g_menu,b_menu
+  );
 
   
 
