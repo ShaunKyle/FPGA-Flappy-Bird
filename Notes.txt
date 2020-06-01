@@ -1,0 +1,6 @@
+Quartus/
+  DEO_pins.csv, make sure to unreserve pin K22 (Piazza @91)
+  TCGROM.mif and other memory files
+
+src/
+  interfaces/
