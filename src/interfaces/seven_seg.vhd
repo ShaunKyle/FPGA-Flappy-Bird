@@ -19,15 +19,10 @@ begin
         variable tens_v : integer := 0;
         variable ones_v : integer := 0;
     begin
-		if (ones_v = 9) then
-			tens_v := tens_v + 1;
-			ones_v := 0;
-      else
-        ones_v := ones_v + 1;
-		end if;
-
-      bcd_number_ones <= CONV_STD_LOGIC_VECTOR(5, 4);
-      bcd_number_tens <= CONV_STD_LOGIC_VECTOR(9, 4);
+		tens_v := number/10;
+		ones_v := number - (number/10)*10;
+    	bcd_number_ones <= CONV_STD_LOGIC_VECTOR(ones_v, 4);
+    	bcd_number_tens <= CONV_STD_LOGIC_VECTOR(tens_v, 4);
     end process;
     
     process (bcd_number_tens)

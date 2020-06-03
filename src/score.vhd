@@ -14,9 +14,9 @@ entity score is
 end entity score;
 
 architecture behavioural of score is
-	signal score_s	 : integer;
+	signal score_s	 : integer := 0;
 begin
-	process (reset, enable, current_score)
+	process
 	begin
 		if (reset = '1') then
 			-- score_s <= level_score;
@@ -26,10 +26,8 @@ begin
 		else
 			score_s <= current_score;
 		end if;
+		wait until enable='1';
 	end process;
-
-	new_score <= score_s;
-
 end behavioural;
 
 	

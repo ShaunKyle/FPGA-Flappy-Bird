@@ -12,14 +12,14 @@ ENTITY FLAPPY_GAME IS
 
     mouse_data, mouse_clk : inout std_logic;
 
-    seg0,seg1,seg2,seg3 : out std_logic_vector(6 downto 0);
-    seg0_dec,seg1_dec,seg2_dec,seg3_dec : out std_logic;
-    LEDG : out std_logic_vector(9 downto 0);
-		h_sync :  OUT  STD_LOGIC;
-		v_sync :  OUT  STD_LOGIC;
-		b_out :  OUT  STD_LOGIC_VECTOR(3 DOWNTO 0);
-		g_out :  OUT  STD_LOGIC_VECTOR(3 DOWNTO 0);
-		r_out :  OUT  STD_LOGIC_VECTOR(3 DOWNTO 0)
+    LEDG          : OUT std_logic_vector(9 downto 0);
+		h_sync        : OUT STD_LOGIC;
+		v_sync        : OUT STD_LOGIC;
+		b_out         : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		g_out         : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    r_out         : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    display_tens  : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+    display_ones  : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
 	);
 END FLAPPY_GAME;
 
@@ -52,6 +52,9 @@ architecture structure of FLAPPY_GAME is
   signal rng_pipe_height1, rng_pipe_height2 : std_logic_vector(9 downto 0);
   signal rng_pipe1, rng_pipe2               : std_logic;
   signal flap_btn,pause_btn                 : std_logic;
+  
+  signal new_score								          : integer;
+  signal score_enable1, score_enable2       : std_logic;
   
 begin
   --
@@ -133,7 +136,8 @@ begin
     game_start,
     collision,
     pipe1_height, pipe1_pos,
-    rng_pipe1
+    rng_pipe1,
+    score_enable1
   );
 
   object_Pipe2: entity work.pipe
@@ -146,7 +150,8 @@ begin
     game_start,
     collision,
     pipe2_height, pipe2_pos,
-    rng_pipe2
+    rng_pipe2,
+    score_enable2
   );
   
   detect_Collision: entity work.collision PORT MAP (
@@ -167,6 +172,19 @@ begin
     clk_25,
     rng_pipe2,
     rng_pipe_height2
+  );
+
+  score_Keeper: entity work.score PORT MAP (
+    collision,
+    new_score,
+    score_enable1 or score_enable2,
+    new_score
+  );
+
+  score_Display: entity work.seven_seg PORT MAP (
+    new_score,
+    display_tens,
+    display_ones
   );
   
   --
