@@ -4,29 +4,47 @@ use  IEEE.STD_LOGIC_ARITH.all;
 use  IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity pipe is
+	 generic (
+		starting_pos		  : std_logic_vector(9 downto 0) := "1010000000"
+	 );
     port(
-        vert_s, game_started : in std_logic;
-        reset  				  : in std_logic;
+		rng_pipe_height 	  : in  std_logic_vector(9 downto 0);
+        vert_s, game_started  : in  std_logic;
+        reset  				  : in  std_logic;
         pipe_height   		  : out std_logic_vector(9 downto 0);
-        pipe_pos             : out std_logic_vector(9 downto 0)
+		pipe_pos              : out std_logic_vector(9 downto 0);
+		rng_pipe		      : out std_logic
     );
 end entity pipe;
 
 architecture behavioural of pipe is
-    signal pipe_pos_s    : std_logic_vector(9 downto 0) := "0111100000";
-    constant pipe_height_s : std_logic_vector(9 downto 0) := "0011010001";
-	 constant right_edge    : std_logic_vector(9 downto 0) := "1010000000";
+	 signal rng_pipe_s		: std_logic := '0';
+	 signal pipe_height_s	: std_logic_vector(9 downto 0);
+	 constant right_edge	: std_logic_vector(9 downto 0) := "1010100000";
+     signal pipe_pos_s      : std_logic_vector(9 downto 0) := "0111100000";
+	 constant bird_X 		: std_logic_vector(9 downto 0) := "0011000000";
 begin
+	 height_validation: process(rng_pipe_height)
+	 begin
+		if ((rng_pipe_height < CONV_STD_LOGIC_VECTOR(10, 10)) or (rng_pipe_height > CONV_STD_LOGIC_VECTOR(320, 10))) then
+			pipe_height_s <= CONV_STD_LOGIC_VECTOR(180, 10);
+		else
+			pipe_height_s <= rng_pipe_height;
+		end if;
+	 end process;
+	 
     process(vert_s, reset, game_started)
     begin
         if (reset = '1') then
-            pipe_pos_s <= right_edge;
+            pipe_pos_s <= starting_pos;
         else
             if (rising_edge(vert_s)) then
 					 if (game_started = '1') then
 						 if (pipe_pos_s > "0000000000") then
+							  rng_pipe_s <= '0';
 							  pipe_pos_s <= pipe_pos_s - "0000000010";
 						 else
+							  rng_pipe_s <= '1';
 							  pipe_pos_s <= right_edge;
 						 end if;
 					 end if;
@@ -36,4 +54,5 @@ begin
     
     pipe_height <= pipe_height_s;
     pipe_pos <= pipe_pos_s;
+	 rng_pipe <= rng_pipe_s;
 end behavioural;

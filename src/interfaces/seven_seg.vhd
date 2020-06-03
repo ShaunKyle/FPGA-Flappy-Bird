@@ -1,60 +1,78 @@
-library IEEE;
-use IEEE.std_logic_1164.all;
---Todo: convert to using integer input?
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_arith.all;
+
 entity seven_seg is
-  port(
-    Hex_in  : in std_logic_vector(3 downto 0);
-    Disp_out  : out std_logic_vector(6 downto 0)
-  );
+    port (
+        number : in integer;
+        display_tens : out std_logic_vector(6 downto 0);
+        display_ones : out std_logic_vector(6 downto 0)
+    );
 end entity seven_seg;
 
-
-architecture behavioural of seven_seg is
-
+architecture behaviour of seven_seg is
+    signal bcd_number_ones : std_logic_vector(3 downto 0) := "0000";
+    signal bcd_number_tens : std_logic_vector(3 downto 0) := "0000";
 begin
-  -- with Hex_in select Disp_out <=
-  --   "11000000" when "0000",
-  --   "11111001" when "0001",
-  --   "10100100" when "0010",
-  --   "10110000" when "0011",
-  --   "10011001" when "0100",
-  --   "10010010" when "0101",
-  --   "10000010" when "0110",
-  --   "11111000" when "0111",
-  --   "10000000" when "1000",
-  --   "10011000" when "1001",
 
-  --   "10001000" when "1010",
-  --   "10000011" when "1011", --lowercase b
-  --   "11000110" when "1100",
-  --   "10100001" when "1101", --lowercase d
-  --   "10000110" when "1110",
-  --   "10001110" when "1111",
+    process(number)
+        variable tens_v : integer := 0;
+        variable ones_v : integer := 0;
+    begin
+		if (ones_v = 9) then
+			tens_v := tens_v + 1;
+			ones_v := 0;
+      else
+        ones_v := ones_v + 1;
+		end if;
 
-  --   "11111111" when others;
-
-  --Without decimal point
-  with Hex_in select Disp_out <=
-    "1000000" when "0000",
-    "1111001" when "0001",
-    "0100100" when "0010",
-    "0110000" when "0011",
-    "0011001" when "0100",
-    "0010010" when "0101",
-    "0000010" when "0110",
-    "1111000" when "0111",
-    "0000000" when "1000",
-    "0011000" when "1001",
-
-    "0001000" when "1010",
-    "0000011" when "1011", --lowercase b
-    "1000110" when "1100",
-    "0100001" when "1101", --lowercase d
-    "0000110" when "1110",
-    "0001110" when "1111",
-
-    "1111111" when others;
-
-    --See pg 26 DE0 user manual
-
-end architecture behavioural;
+      bcd_number_ones <= CONV_STD_LOGIC_VECTOR(5, 4);
+      bcd_number_tens <= CONV_STD_LOGIC_VECTOR(9, 4);
+    end process;
+    
+    process (bcd_number_tens)
+    begin
+        case bcd_number_tens is
+				when "0000" => display_tens <= "1000000"; -- "0"     
+				when "0001" => display_tens <= "1111001"; -- "1" 
+				when "0010" => display_tens <= "0100100"; -- "2" 
+				when "0011" => display_tens <= "0110000"; -- "3" 
+				when "0100" => display_tens <= "0011001"; -- "4" 
+				when "0101" => display_tens <= "0010010"; -- "5" 
+				when "0110" => display_tens <= "0000010"; -- "6" 
+				when "0111" => display_tens <= "1111000"; -- "7" 
+				when "1000" => display_tens <= "0000000"; -- "8"     
+				when "1001" => display_tens <= "0011000"; -- "9" 
+				when "1010" => display_tens <= "0001000"; -- a
+				when "1011" => display_tens <= "0000011"; -- b
+				when "1100" => display_tens <= "1000110"; -- C
+				when "1101" => display_tens <= "0100001"; -- d
+				when "1110" => display_tens <= "0000110"; -- E
+				when "1111" => display_tens <= "0001110"; -- F
+				when others => display_tens <= "1111111"; -- Off
+        end case;
+    end process;
+	 
+    process (bcd_number_ones)
+    begin
+        case bcd_number_ones is
+				when "0000" => display_ones <= "1000000"; -- "0"     
+				when "0001" => display_ones <= "1111001"; -- "1" 
+				when "0010" => display_ones <= "0100100"; -- "2" 
+				when "0011" => display_ones <= "0110000"; -- "3" 
+				when "0100" => display_ones <= "0011001"; -- "4" 
+				when "0101" => display_ones <= "0010010"; -- "5" 
+				when "0110" => display_ones <= "0000010"; -- "6" 
+				when "0111" => display_ones <= "1111000"; -- "7" 
+				when "1000" => display_ones <= "0000000"; -- "8"     
+				when "1001" => display_ones <= "0011000"; -- "9" 
+				when "1010" => display_ones <= "0001000"; -- a
+				when "1011" => display_ones <= "0000011"; -- b
+				when "1100" => display_ones <= "1000110"; -- C
+				when "1101" => display_ones <= "0100001"; -- d
+				when "1110" => display_ones <= "0000110"; -- E
+				when "1111" => display_ones <= "0001110"; -- F
+				when others => display_ones <= "1111111"; -- Off
+        end case;
+    end process;
+end architecture behaviour;

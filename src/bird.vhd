@@ -6,7 +6,7 @@ use  IEEE.STD_LOGIC_UNSIGNED.all;
 entity bird is
     port (
         vert_sync   : in std_logic;
-		  reset  	  : in std_logic;
+		reset  	    : in std_logic;
         left_btn    : in std_logic;
         game_start  : out std_logic;
         bird_height : out std_logic_vector(9 downto 0)
@@ -29,7 +29,7 @@ architecture behavioural of bird is
     constant max_speed  : std_logic_vector(3 downto 0) := "0011"; --0100
     constant max_acceleration : std_logic_vector(3 downto 0) := "0011";
 
-    constant flap_speed : std_logic_vector(3 downto 0) := "1000";
+    constant flap_speed : std_logic_vector(3 downto 0) := "1010";
     constant flap_duration : integer := 4;
 
     signal Q0, Q1, Q2 : std_logic := '0';
@@ -86,10 +86,4 @@ begin
     bird_height <= bird_height_s;
     game_start <= game_start_s;
 
-
-
-
-    
-    
-    
 end behavioural;

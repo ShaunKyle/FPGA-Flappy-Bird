@@ -44,12 +44,15 @@ architecture structure of FLAPPY_GAME is
 
 
   --Game signals
-  signal bird_height : std_logic_vector(9 downto 0);
-  signal pipe_height, pipe_pos : std_logic_vector(9 downto 0);
-  signal game_start : std_logic := '0';
-  signal collision : std_logic := '0';
-
-  signal flap_btn,pause_btn : std_logic;
+  signal bird_height 				                : std_logic_vector(9 downto 0);
+  signal pipe1_height, pipe1_pos            : std_logic_vector(9 downto 0);
+  signal pipe2_height, pipe2_pos            : std_logic_vector(9 downto 0);
+  signal game_start                         : std_logic := '0';
+  signal collision                          : std_logic := '0';
+  signal rng_pipe_height1, rng_pipe_height2 : std_logic_vector(9 downto 0);
+  signal rng_pipe1, rng_pipe2               : std_logic;
+  signal flap_btn,pause_btn                 : std_logic;
+  
 begin
   --
   -- Instantiate interface components. Relevant inputs/outputs are exposed as signal wires.
@@ -69,6 +72,7 @@ begin
     horiz_sync,vert_sync,
     row,column            --Output current pixel position
   );
+
   h_sync <= horiz_sync;
   v_sync <= vert_sync;
 
@@ -79,33 +83,32 @@ begin
     mouse_row,mouse_col
   );
 
-  inst_SevenSeg0: entity work.seven_seg port map(in_seg0,seg0);
-  inst_SevenSeg1: entity work.seven_seg port map(in_seg1,seg1);
-  inst_SevenSeg2: entity work.seven_seg port map(in_seg2,seg2);
-  inst_SevenSeg3: entity work.seven_seg port map(in_seg3,seg3);
-  
-
   --
   -- Screen multiplexer
   --
   r <= 
-    r_game when (false) else
+    r_game when (true) else
     r_menu;
   g <= 
-    g_game when (false) else
+    g_game when (true) else
     g_menu;
   b <= 
-    b_game when (false) else
+    b_game when (true) else
     b_menu;
 
   --
   -- Game
   --
 
-  inst_Display_Game: entity work.display_controller PORT MAP (
+  inst_Display_Game: entity work.display_controller 
+  GENERIC MAP (
+    pipe_gap => "0001100111"
+  )
+  PORT MAP (
     clk_25,
     bird_height,
-    pipe_pos,pipe_height,
+    pipe1_pos,pipe1_height,
+    pipe2_pos,pipe2_height,
     row,column,
     r_game,g_game,b_game
   );
@@ -120,53 +123,59 @@ begin
 
   flap_btn <= (not mouse_btnL) and pb2; --Why is it use AND instead of OR? Whatever.
 
-
-  object_Pipe: entity work.pipe PORT MAP (
+  object_Pipe1: entity work.pipe
+  GENERIC MAP (
+    starting_pos => "1010000000"
+  )
+  PORT MAP (
+    rng_pipe_height1,
     vert_sync,
     game_start,
     collision,
-    pipe_height, pipe_pos
+    pipe1_height, pipe1_pos,
+    rng_pipe1
   );
 
+  object_Pipe2: entity work.pipe
+  GENERIC MAP (
+    starting_pos => "1111000000"
+  )
+  PORT MAP (
+    rng_pipe_height2,
+    vert_sync,
+    game_start,
+    collision,
+    pipe2_height, pipe2_pos,
+    rng_pipe2
+  );
+  
   detect_Collision: entity work.collision PORT MAP (
     clk_25,
     bird_height,
-    pipe_height, pipe_pos,
+    pipe1_height, pipe1_pos,
+    pipe2_height, pipe2_pos,
     collision
   );
 
+  random_Number_Generator1: entity work.lfsr PORT MAP (
+    clk_25,
+    rng_pipe1,
+    rng_pipe_height1
+  );
+  
+  random_Number_Generator2: entity work.lfsr PORT MAP (
+    clk_25,
+    rng_pipe2,
+    rng_pipe_height2
+  );
   
   --
   -- Menu
   --
-
   inst_Display_Menu: entity work.display_menu PORT MAP (
     clk_25,row,column,
     mouse_col,mouse_row,
     r_menu,g_menu,b_menu
   );
-
-  
-
-  --
-  -- Do test stuff
-  --
-  -- r <= "0000";
-  -- g <= "1111";
-  -- b <= "0000";
-
-  in_seg0 <= mouse_row(5 downto 2);
-  in_seg1 <= mouse_row(9 downto 6);
-  in_seg2 <= mouse_col(5 downto 2);
-  in_seg3 <= mouse_col(9 downto 6);
-
-  seg0_dec <= pb0;
-  seg1_dec <= pb1;
-  seg2_dec <= '0';
-  seg3_dec <= pb2;
-
-  LEDG <= sw;
-
-
 
 end architecture structure;
