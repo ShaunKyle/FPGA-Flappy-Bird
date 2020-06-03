@@ -54,7 +54,7 @@ architecture structure of FLAPPY_GAME is
   signal flap_btn,pause_btn                 : std_logic;
   
   signal new_score								          : integer;
-  signal score_enable1, score_enable2       : std_logic;
+  signal score1, score2                     : std_logic_vector(6 downto 0);
   
 begin
   --
@@ -137,7 +137,7 @@ begin
     collision,
     pipe1_height, pipe1_pos,
     rng_pipe1,
-    score_enable1
+    score1
   );
 
   object_Pipe2: entity work.pipe
@@ -151,7 +151,7 @@ begin
     collision,
     pipe2_height, pipe2_pos,
     rng_pipe2,
-    score_enable2
+    score2
   );
   
   detect_Collision: entity work.collision PORT MAP (
@@ -162,27 +162,22 @@ begin
     collision
   );
 
-  random_Number_Generator1: entity work.lfsr PORT MAP (
+  random_Number_Generator1: entity work.lfsr 
+  PORT MAP (
     clk_25,
     rng_pipe1,
     rng_pipe_height1
   );
   
-  random_Number_Generator2: entity work.lfsr PORT MAP (
+  random_Number_Generator2: entity work.lfsr 
+  PORT MAP (
     clk_25,
     rng_pipe2,
     rng_pipe_height2
   );
 
-  score_Keeper: entity work.score PORT MAP (
-    collision,
-    new_score,
-    score_enable1 or score_enable2,
-    new_score
-  );
-
   score_Display: entity work.seven_seg PORT MAP (
-    new_score,
+    score1, score2,
     display_tens,
     display_ones
   );

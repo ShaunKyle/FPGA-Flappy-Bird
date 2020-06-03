@@ -1,24 +1,27 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
 
 entity seven_seg is
     port (
-        number : in integer;
-        display_tens : out std_logic_vector(6 downto 0);
-        display_ones : out std_logic_vector(6 downto 0)
+        score1, score2 : in std_logic_vector(6 downto 0);
+        display_tens   : out std_logic_vector(6 downto 0);
+        display_ones   : out std_logic_vector(6 downto 0)
     );
 end entity seven_seg;
 
 architecture behaviour of seven_seg is
     signal bcd_number_ones : std_logic_vector(3 downto 0) := "0000";
-    signal bcd_number_tens : std_logic_vector(3 downto 0) := "0000";
+	signal bcd_number_tens : std_logic_vector(3 downto 0) := "0000";
+	signal number, number1, number2 : integer;
 begin
 
-    process(number)
+    process(score1, score2)
         variable tens_v : integer := 0;
-        variable ones_v : integer := 0;
-    begin
+		variable ones_v : integer := 0;
+	begin
+		number <= conv_integer(unsigned(score1)) + conv_integer(unsigned(score2));
 		tens_v := number/10;
 		ones_v := number - (number/10)*10;
     	bcd_number_ones <= CONV_STD_LOGIC_VECTOR(ones_v, 4);

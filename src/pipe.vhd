@@ -14,11 +14,12 @@ entity pipe is
         pipe_height   		  : out std_logic_vector(9 downto 0);
 		pipe_pos              : out std_logic_vector(9 downto 0);
 		rng_pipe		      : out std_logic;
-		score_enable		  : out std_logic
+		score				  : out std_logic_vector(6 downto 0)
     );
 end entity pipe;
 
 architecture behavioural of pipe is
+	signal score_s		 : std_logic_vector(6 downto 0) := "0000000";
 	signal score_flag    : std_logic := '0';
 	signal rng_pipe_s	 : std_logic := '0';
 	signal pipe_height_s : std_logic_vector(9 downto 0);
@@ -37,7 +38,8 @@ begin
 	 
     process(vert_s, reset, game_started)
     begin
-        if (reset = '1') then
+		if (reset = '1') then
+			score_s <= CONV_STD_LOGIC_VECTOR(0, 7);
             pipe_pos_s <= starting_pos;
         else
             if (rising_edge(vert_s)) then
@@ -45,12 +47,11 @@ begin
 					if (pipe_pos_s > "0000000000") then
 						rng_pipe_s <= '0';
 					    if ((pipe_pos_s < bird_X) and (score_flag <= '0')) then
-							score_enable <= '1';
+							score_s <= score_s + CONV_STD_LOGIC_VECTOR(1, 7);
 							score_flag <= '1';
 						end if;
 						pipe_pos_s <= pipe_pos_s - "0000000010";
 					else
-						score_enable <= '0';
 						score_flag <= '0';
 						rng_pipe_s <= '1';
 						pipe_pos_s <= right_edge;
@@ -59,7 +60,8 @@ begin
             end if;
         end if;
     end process;
-    
+	
+	score <= score_s;
     pipe_height <= pipe_height_s;
     pipe_pos <= pipe_pos_s;
 	rng_pipe <= rng_pipe_s;
