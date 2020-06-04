@@ -63,14 +63,14 @@ architecture structure of FLAPPY_GAME is
   signal score1, score2                     : std_logic_vector(6 downto 0);
   signal pipe_gap                           : std_logic_vector(9 downto 0) := "0010010000";
   signal pipe_speed                         : std_logic_vector(9 downto 0) := "0000000010";
-  signal training                           : std_logic;
+  signal is_train_mode : std_logic;
 
   signal count : integer;
 
   --Screen signals
   signal screen : std_logic_vector(1 downto 0) := "00";
-
-
+  
+  
 
   signal vert_sync_t : std_logic;
 begin
@@ -107,23 +107,26 @@ begin
   -- Screen multiplexer
   --
   inst_ScreenFSM: entity work.screen_FSM PORT MAP(
-    Clk_25, '1',
+    Clk, '1',
+    sw(0),sw(1),
     game_win,
-    sw(0), sw(1),
-
-    screen
+    screen,
+    is_train_mode
   );
 
   LEDG <= sw;
 
   r <= 
-    r_game when ((screen = "01") or (screen = "10")) else
+    r_game when (screen = "10") else
+    r_game when (screen = "01") else
     r_menu;
   g <= 
-    g_game when ((screen = "01") or (screen = "10")) else
+    g_game when (screen = "10") else
+    g_game when (screen = "01") else
     g_menu;
   b <= 
-    b_game when ((screen = "01") or (screen = "10")) else
+    b_game when (screen = "10") else
+    b_game when (screen = "01") else
     b_menu;
 
   --
@@ -135,7 +138,7 @@ begin
     clk_25,
     score,
     game_over_i,
-    not(pb1),
+    is_train_mode,
     game_over_i,
     level_complete,
     game_win,
