@@ -22,6 +22,7 @@ architecture behaviour of display_menu is
 
 	signal is_option  : BOOLEAN;
 	signal is_cursor  : BOOLEAN;
+	signal is_string  : BOOLEAN;
 
 	constant option_X : std_logic_vector(9 downto 0) := CONV_STD_LOGIC_VECTOR(320,10);
 	constant option_Y : std_logic_vector(9 downto 0) := CONV_STD_LOGIC_VECTOR(240,10);
@@ -38,6 +39,8 @@ architecture behaviour of display_menu is
 	constant cursor_color : std_logic_vector(11 downto 0) := "000010001111";
 	constant background_color  : STD_LOGIC_VECTOR (11 downto 0) := "111011011000";
 begin
+
+
 
 	--Draw box with from centre of shape (rather than top-left)
 	is_option <= 

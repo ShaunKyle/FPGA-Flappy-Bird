@@ -113,6 +113,8 @@ set_location_assignment PIN_A14 -to display_tens[3]
 set_location_assignment PIN_C13 -to display_tens[2]
 set_location_assignment PIN_B13 -to display_tens[1]
 set_location_assignment PIN_A13 -to display_tens[0]
+set_global_assignment -name VHDL_FILE ../src/draw_char.vhd
+set_global_assignment -name VHDL_FILE ../src/pause_disp.vhd
 set_global_assignment -name VHDL_FILE ../src/screen_FSM.vhd
 set_global_assignment -name VHDL_FILE ../src/lfsr.vhd
 set_global_assignment -name VHDL_FILE ../src/display_menu.vhd

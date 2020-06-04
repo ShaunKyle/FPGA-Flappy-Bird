@@ -33,6 +33,7 @@ architecture structure of FLAPPY_GAME is
   signal r,g,b : std_logic_vector(3 downto 0);
   signal r_menu,g_menu,b_menu : std_logic_vector(3 downto 0);
   signal r_game,g_game,b_game : std_logic_vector(3 downto 0);
+  signal r_pause,g_pause,b_pause : std_logic_vector(3 downto 0);
   signal row,column : std_logic_vector(9 downto 0);
   signal vert_sync, horiz_sync : std_logic;
 
@@ -63,7 +64,7 @@ architecture structure of FLAPPY_GAME is
   
   --Screen signals
   signal screen : std_logic_vector(3 downto 0);
-  
+  signal text_out : std_logic;
 begin
   --
   -- Instantiate interface components. Relevant inputs/outputs are exposed as signal wires.
@@ -107,12 +108,15 @@ begin
 
   r <= 
     r_game when (screen = "0001") else
+    r_pause when (screen = "0111") else
     r_menu;
   g <= 
     g_game when (screen = "0001") else
+    g_pause when (screen = "0111") else
     g_menu;
   b <= 
     b_game when (screen = "0001") else
+    b_pause when (screen = "0111") else
     b_menu;
 
   --
@@ -136,12 +140,13 @@ begin
     vert_sync,
     collision,
     flap_btn,
+    level_complete,
     game_start,
     bird_height,
     game_over
   );
 
-  flap_btn <= not(mouse_btnL) and pb2; --Why is it use AND instead of OR? Whatever.
+  flap_btn <= pb2 AND (NOT mouse_btnL); --Dunno why this works. Just leave it.
 
   -- PIPE 1
   object_Pipe1: entity work.pipe
@@ -218,5 +223,24 @@ begin
     flap_btn,
     r_menu,g_menu,b_menu
   );
+
+  --
+  -- Pause screen
+  --
+  -- inst_Pause_disp: entity work.pause_disp PORT MAP (
+  --   clk_25,row,column,
+  --   r_pause,g_pause,b_pause
+  -- );
+
+  inst_char: entity work.draw_char PORT MAP (
+    clk_25,"010000",
+    32,32,
+    row,column,
+    text_out
+  );
+
+  r_pause <= "0000" when text_out = '1' else "1111";
+  g_pause <= "0000" when text_out = '1' else "1111";
+  b_pause <= "0000" when text_out = '1' else "1111";
 
 end architecture structure;
