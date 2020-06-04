@@ -232,15 +232,17 @@ begin
   --   r_pause,g_pause,b_pause
   -- );
 
-  inst_char: entity work.draw_char PORT MAP (
-    clk_25,"010000",
-    32,32,
-    row,column,
-    text_out
-  );
+  -- inst_char: entity work.draw_char PORT MAP (
+  --   clk_25,"010000",
+  --   32,32,
+  --   row,column,
+  --   text_out
+  -- );
 
-  r_pause <= "0000" when text_out = '1' else "1111";
-  g_pause <= "0000" when text_out = '1' else "1111";
-  b_pause <= "0000" when text_out = '1' else "1111";
+  -- r_pause <= "0000" when text_out = '1' else "1111";
+  -- g_pause <= "0000" when text_out = '1' else "1111";
+  -- b_pause <= "0000" when text_out = '1' else "1111";
+
+  --inst_img: entity work.image
 
 end architecture structure;
