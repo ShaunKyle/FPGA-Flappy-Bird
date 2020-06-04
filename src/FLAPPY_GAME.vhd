@@ -63,7 +63,7 @@ architecture structure of FLAPPY_GAME is
   signal score1, score2                     : std_logic_vector(6 downto 0) := "0000000";
   signal pipe_gap                           : std_logic_vector(9 downto 0) := "0010010000";
   signal pipe_speed                         : std_logic_vector(9 downto 0) := "0000000010";
-  signal bird_rgb                           : std_logic_vector(11 downto 0);
+  signal bird_rgb                           : std_logic_vector(14 downto 0);
   signal is_train_mode : std_logic;
 
   signal count : integer;
