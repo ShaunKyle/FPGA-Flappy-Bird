@@ -57,7 +57,7 @@ architecture structure of FLAPPY_GAME is
   signal score1, score2                     : std_logic_vector(6 downto 0);
   
   --Screen signals
-  signal screen : std_logic_vector(1 downto 0);
+  signal screen : std_logic_vector(3 downto 0);
   
 begin
   --
@@ -92,14 +92,22 @@ begin
   --
   -- Screen multiplexer
   --
+  inst_ScreenFSM: entity work.screen_FSM PORT MAP(
+    Clk, '1',
+
+    pb0, pb1,
+
+    screen
+  );
+
   r <= 
-    r_game when (screen = "01") else
+    r_game when (screen = "0001") else
     r_menu;
   g <= 
-    g_game when (screen = "01") else
+    g_game when (screen = "0001") else
     g_menu;
   b <= 
-    b_game when (screen = "01") else
+    b_game when (screen = "0001") else
     b_menu;
 
   --
@@ -191,6 +199,7 @@ begin
   inst_Display_Menu: entity work.display_menu PORT MAP (
     clk_25,row,column,
     mouse_col,mouse_row,
+    flap_btn,
     r_menu,g_menu,b_menu
   );
 
