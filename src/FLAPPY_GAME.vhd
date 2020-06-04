@@ -54,7 +54,7 @@ architecture structure of FLAPPY_GAME is
   signal rng_pipe_height1, rng_pipe_height2 : std_logic_vector(9 downto 0);
   signal rng_pipe1, rng_pipe2               : std_logic;
   signal flap_btn,pause_btn                 : std_logic;
-  signal level_score                        : std_logic_vector(6 downto 0) := CONV_STD_LOGIC_VECTOR(15, 7);
+  signal level_score                        : std_logic_vector(6 downto 0) := CONV_STD_LOGIC_VECTOR(0, 7);
   signal level_complete                     : std_logic := '0';
   signal new_score								          : integer := 0;
   signal score1, score2                     : std_logic_vector(6 downto 0);
@@ -135,14 +135,13 @@ begin
   object_Bird: entity work.bird PORT MAP (
     vert_sync,
     collision,
-    pb2,
-    level_complete,
+    flap_btn,
     game_start,
     bird_height,
     game_over
   );
 
-  ---flap_btn <= pb2; --Why is it use AND instead of OR? Whatever.
+  flap_btn <= not(mouse_btnL) and pb2; --Why is it use AND instead of OR? Whatever.
 
   -- PIPE 1
   object_Pipe1: entity work.pipe
