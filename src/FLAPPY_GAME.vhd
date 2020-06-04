@@ -46,7 +46,8 @@ architecture structure of FLAPPY_GAME is
 
 
   --Game signals
-  signal game_over                          : std_logic := '0';
+  signal game_over, game_over_i, game_win   : std_logic := '0';
+  signal main_menu                          : std_logic := '0';
   signal bird_height 				                : std_logic_vector(9 downto 0);
   signal pipe1_height, pipe1_pos            : std_logic_vector(9 downto 0);
   signal pipe2_height, pipe2_pos            : std_logic_vector(9 downto 0);
@@ -56,12 +57,13 @@ architecture structure of FLAPPY_GAME is
   signal rng_pipe1, rng_pipe2               : std_logic;
   signal flap_btn,pause_btn                 : std_logic;
   signal level_score                        : std_logic_vector(6 downto 0) := CONV_STD_LOGIC_VECTOR(0, 7);
-  signal level_complete                     : std_logic := '0';
-  signal new_score								          : integer := 0;
+  signal level_complete, level_complete_o   : std_logic := '0';
+  signal score								              : integer := 0;
   signal score1, score2                     : std_logic_vector(6 downto 0);
   signal pipe_gap                           : std_logic_vector(9 downto 0) := "0010010000";
   signal pipe_speed                         : std_logic_vector(9 downto 0) := "0000000010";
-  
+  signal lives                              : std_logic_vector(1 downto 0) := "11";
+
   --Screen signals
   signal screen : std_logic_vector(3 downto 0);
   signal text_out : std_logic;
@@ -123,6 +125,23 @@ begin
   -- Game
   --
 
+  -- GAME FSM
+  inst_GameFSM: entity work.game_FSM PORT MAP(
+    clk_25,
+    collision,
+    score,
+    level_complete_o,
+    game_over_i,
+    sw(0),
+    game_over_i,
+    level_complete_o,
+    game_win,
+    main_menu,
+    level_score,
+    lives,
+    pipe_gap, pipe_speed
+  );
+
   -- DISPLAY GAME
   inst_Display_Game: entity work.display_controller 
   PORT MAP (
@@ -139,8 +158,9 @@ begin
   object_Bird: entity work.bird PORT MAP (
     vert_sync,
     collision,
+    level_complete_o,
     flap_btn,
-    level_complete,
+    lives,
     game_start,
     bird_height,
     game_over
@@ -157,7 +177,7 @@ begin
     rng_pipe_height1,
     vert_sync,
     game_start,
-    collision,
+    collision or level_complete_o,
     pipe_speed,
     pipe1_height, pipe1_pos,
     rng_pipe1,
@@ -173,7 +193,7 @@ begin
     rng_pipe_height2,
     vert_sync,
     game_start,
-    collision,
+    collision or level_complete_o,
     pipe_speed,
     pipe2_height, pipe2_pos,
     rng_pipe2,
@@ -210,6 +230,7 @@ begin
   score_Display: entity work.seven_seg PORT MAP (
     score1, score2,
     level_score,
+    score,
     display_tens,
     display_ones
   );
