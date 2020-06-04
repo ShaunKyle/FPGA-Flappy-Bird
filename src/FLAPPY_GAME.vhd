@@ -107,7 +107,7 @@ begin
   );
 
   r <= 
-    r_game when (screen = "0001") else
+    r_game when ((screen = "0001") or (screen = "0010") or (screen = "0011")) else
     r_pause when (screen = "0111") else
     r_menu;
   g <= 

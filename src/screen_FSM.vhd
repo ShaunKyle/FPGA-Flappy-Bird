@@ -18,7 +18,7 @@ end entity screen_FSM;
 
 architecture behaviour of screen_FSM is 
   type t_screens is (Menu, Training, Level1, Level2, Level3, Win, Lose, Pause);
-  signal state, next_state : t_screens := Menu;
+  signal state, prev_state : t_screens := Menu;
 
 begin
 
@@ -46,12 +46,26 @@ begin
           output_state <= "0001";
 
           if pb1 = '0' then
+            prev_state <= Level1;
             state <= Pause;
           end if;
+        
         when Level2 =>
           output_state <= "0010";
+
+          if pb1 = '0' then
+            prev_state <= Level2;
+            state <= Pause;
+          end if;
+        
         when Level3 =>
           output_state <= "0011";
+
+          if pb1 = '0' then
+            prev_state <= Level3;
+            state <= Pause;
+          end if;
+
         when Win =>
           output_state <= "0100";
         when Lose =>
@@ -61,7 +75,10 @@ begin
         when Pause =>
           output_state <= "0111";
 
-
+          if pb0 = '0' then
+            state <= prev_state;
+          end if;
+        
       end case;
     end if;
   end if;
