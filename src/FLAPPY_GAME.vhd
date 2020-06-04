@@ -246,17 +246,17 @@ begin
   );
 
   --Deaths display
-  death_disp: entity work.seven_seg PORT MAP(
-    count,
-    seven_seg3,
-    seven_seg2
-  );
+  -- death_disp: entity work.seven_seg PORT MAP(
+  --   count,
+  --   seven_seg3,
+  --   seven_seg2
+  -- );
 
-  collision_count: entity work.collision_counter PORT MAP(
-    clk_25,'0',
-    collision,
-    count
-  );
+  -- collision_count: entity work.collision_counter PORT MAP(
+  --   clk_25,'0',
+  --   collision,
+  --   count
+  -- );
   
   --
   -- Menu
