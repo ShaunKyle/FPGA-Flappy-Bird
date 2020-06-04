@@ -12,14 +12,14 @@ ENTITY FLAPPY_GAME IS
 
     mouse_data, mouse_clk : inout std_logic;
 
-    seg0,seg1,seg2,seg3 : out std_logic_vector(6 downto 0);
-    seg0_dec,seg1_dec,seg2_dec,seg3_dec : out std_logic;
-    LEDG : out std_logic_vector(9 downto 0);
-		h_sync :  OUT  STD_LOGIC;
-		v_sync :  OUT  STD_LOGIC;
-		b_out :  OUT  STD_LOGIC_VECTOR(3 DOWNTO 0);
-		g_out :  OUT  STD_LOGIC_VECTOR(3 DOWNTO 0);
-		r_out :  OUT  STD_LOGIC_VECTOR(3 DOWNTO 0)
+    LEDG          : OUT std_logic_vector(9 downto 0);
+		h_sync        : OUT STD_LOGIC;
+		v_sync        : OUT STD_LOGIC;
+		b_out         : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+		g_out         : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    r_out         : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    display_tens  : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+    display_ones  : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
 	);
 END FLAPPY_GAME;
 
@@ -44,6 +44,7 @@ architecture structure of FLAPPY_GAME is
 
 
   --Game signals
+<<<<<<< HEAD
   signal bird_height : std_logic_vector(9 downto 0);
   signal pipe_height, pipe_pos : std_logic_vector(9 downto 0);
   signal game_start : std_logic := '0';
@@ -54,6 +55,20 @@ architecture structure of FLAPPY_GAME is
   --Screen signals
   signal screen : std_logic_vector(1 downto 0);
 
+=======
+  signal bird_height 				                : std_logic_vector(9 downto 0);
+  signal pipe1_height, pipe1_pos            : std_logic_vector(9 downto 0);
+  signal pipe2_height, pipe2_pos            : std_logic_vector(9 downto 0);
+  signal game_start                         : std_logic := '0';
+  signal collision                          : std_logic := '0';
+  signal rng_pipe_height1, rng_pipe_height2 : std_logic_vector(9 downto 0);
+  signal rng_pipe1, rng_pipe2               : std_logic;
+  signal flap_btn,pause_btn                 : std_logic;
+  
+  signal new_score								          : integer;
+  signal score1, score2                     : std_logic_vector(6 downto 0);
+  
+>>>>>>> 8a83e5b7945f98e26037099631a6e26ebf2f661f
 begin
   --
   -- Instantiate interface components. Relevant inputs/outputs are exposed as signal wires.
@@ -73,6 +88,7 @@ begin
     horiz_sync,vert_sync,
     row,column            --Output current pixel position
   );
+
   h_sync <= horiz_sync;
   v_sync <= vert_sync;
 
@@ -83,16 +99,11 @@ begin
     mouse_row,mouse_col
   );
 
-  inst_SevenSeg0: entity work.seven_seg port map(in_seg0,seg0);
-  inst_SevenSeg1: entity work.seven_seg port map(in_seg1,seg1);
-  inst_SevenSeg2: entity work.seven_seg port map(in_seg2,seg2);
-  inst_SevenSeg3: entity work.seven_seg port map(in_seg3,seg3);
-  
-
   --
   -- Screen multiplexer
   --
   r <= 
+<<<<<<< HEAD
     r_game when (screen = "01") else
     r_menu;
   g <= 
@@ -100,16 +111,30 @@ begin
     g_menu;
   b <= 
     b_game when (screen = "01") else
+=======
+    r_game when (true) else
+    r_menu;
+  g <= 
+    g_game when (true) else
+    g_menu;
+  b <= 
+    b_game when (true) else
+>>>>>>> 8a83e5b7945f98e26037099631a6e26ebf2f661f
     b_menu;
 
   --
   -- Game
   --
 
-  inst_Display_Game: entity work.display_controller PORT MAP (
+  inst_Display_Game: entity work.display_controller 
+  GENERIC MAP (
+    pipe_gap => "0001100111"
+  )
+  PORT MAP (
     clk_25,
     bird_height,
-    pipe_pos,pipe_height,
+    pipe1_pos,pipe1_height,
+    pipe2_pos,pipe2_height,
     row,column,
     r_game,g_game,b_game
   );
@@ -124,53 +149,69 @@ begin
 
   flap_btn <= (not mouse_btnL) and pb2; --Why is it use AND instead of OR? Whatever.
 
-
-  object_Pipe: entity work.pipe PORT MAP (
+  object_Pipe1: entity work.pipe
+  GENERIC MAP (
+    starting_pos => "1010000000"
+  )
+  PORT MAP (
+    rng_pipe_height1,
     vert_sync,
     game_start,
     collision,
-    pipe_height, pipe_pos
+    pipe1_height, pipe1_pos,
+    rng_pipe1,
+    score1
   );
 
+  object_Pipe2: entity work.pipe
+  GENERIC MAP (
+    starting_pos => "1111000000"
+  )
+  PORT MAP (
+    rng_pipe_height2,
+    vert_sync,
+    game_start,
+    collision,
+    pipe2_height, pipe2_pos,
+    rng_pipe2,
+    score2
+  );
+  
   detect_Collision: entity work.collision PORT MAP (
     clk_25,
     bird_height,
-    pipe_height, pipe_pos,
+    pipe1_height, pipe1_pos,
+    pipe2_height, pipe2_pos,
     collision
   );
 
+  random_Number_Generator1: entity work.lfsr 
+  PORT MAP (
+    clk_25,
+    rng_pipe1,
+    rng_pipe_height1
+  );
+  
+  random_Number_Generator2: entity work.lfsr 
+  PORT MAP (
+    clk_25,
+    rng_pipe2,
+    rng_pipe_height2
+  );
+
+  score_Display: entity work.seven_seg PORT MAP (
+    score1, score2,
+    display_tens,
+    display_ones
+  );
   
   --
   -- Menu
   --
-
   inst_Display_Menu: entity work.display_menu PORT MAP (
     clk_25,row,column,
     mouse_col,mouse_row,
     r_menu,g_menu,b_menu
   );
-
-  
-
-  --
-  -- Do test stuff
-  --
-  -- r <= "0000";
-  -- g <= "1111";
-  -- b <= "0000";
-
-  in_seg0 <= mouse_row(5 downto 2);
-  in_seg1 <= mouse_row(9 downto 6);
-  in_seg2 <= mouse_col(5 downto 2);
-  in_seg3 <= mouse_col(9 downto 6);
-
-  seg0_dec <= pb0;
-  seg1_dec <= pb1;
-  seg2_dec <= '0';
-  seg3_dec <= pb2;
-
-  LEDG <= sw;
-
-
 
 end architecture structure;
