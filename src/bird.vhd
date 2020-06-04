@@ -20,6 +20,7 @@ architecture behavioural of bird is
     signal game_start_s : std_logic := '1';
     signal lives        : std_logic_vector(1 downto 0) := "11";
     signal game_over_s  : std_logic := '0';
+    signal next_level_s : std_logic;
 
     -- height signals;
     signal bird_height_s : std_logic_vector(9 downto 0) := "0001111000";
@@ -39,7 +40,7 @@ architecture behavioural of bird is
     signal Q0, Q1, Q2 : std_logic := '0';
     signal stop_flap : std_logic := '0';
 begin
-    process(vert_sync, reset, game_start_s, next_level)
+    process(vert_sync, reset, game_start_s)
         variable loop_count : integer := 0;
     begin
         if (reset = '1') then
@@ -57,7 +58,7 @@ begin
             bird_speed <= init_speed;
             acceleration <= "0001";
             game_start_s <= '0';
-        else 
+        else
             if (rising_edge(vert_sync)) then
                 --Start game when btn pressed
                 if (left_btn = '0') then
@@ -65,7 +66,6 @@ begin
                 end if;
 				
                 if (game_start_s = '1') then
-                    
                     --Make height change
                     if (bird_height_s < max_height) then
                             bird_height_s <= bird_height_s + bird_speed;

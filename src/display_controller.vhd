@@ -4,9 +4,6 @@ use  IEEE.STD_LOGIC_ARITH.all;
 use  IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity display_controller is
-	generic (
-		pipe_gap : STD_LOGIC_VECTOR (9 downto 0) := "0001100111"
-	);
 	port (
 		clk_25								: IN STD_LOGIC;
 		bird_height							: IN STD_LOGIC_VECTOR(9 downto 0);
@@ -14,8 +11,8 @@ entity display_controller is
 		pipe1_height						: IN STD_LOGIC_VECTOR(9 downto 0);
 		pipe2_pos							: IN STD_LOGIC_VECTOR(9 downto 0);
 		pipe2_height						: IN STD_LOGIC_VECTOR(9 downto 0);
-		pixel_row, pixel_column			: IN STD_LOGIC_VECTOR(9 downto 0);
-		
+		pixel_row, pixel_column				: IN STD_LOGIC_VECTOR(9 downto 0);
+		pipe_gap 							: IN STD_LOGIC_VECTOR(9 downto 0);
 		
 		red_out, green_out, blue_out  : OUT STD_LOGIC_VECTOR(3 downto 0)
 	);

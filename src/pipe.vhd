@@ -4,20 +4,18 @@ use  IEEE.STD_LOGIC_ARITH.all;
 use  IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity pipe is
-	 generic (
-		starting_pos		  : std_logic_vector(9 downto 0) := "1010000000"
-	 );
+	generic (
+	starting_pos		  : std_logic_vector(9 downto 0) := "1010000000"
+	);
     port(
 		rng_pipe_height 	  : in  std_logic_vector(9 downto 0);
         vert_s, game_started  : in  std_logic;
 		reset  				  : in  std_logic;
-		level_score_in		  : in  std_logic_vector(6 downto 0);
-		pipe_speed			  : in  std_logic_vector(9 downto 0)
+		pipe_speed			  : in  std_logic_vector(9 downto 0);
         pipe_height   		  : out std_logic_vector(9 downto 0);
 		pipe_pos              : out std_logic_vector(9 downto 0);
 		rng_pipe		      : out std_logic;
-		score				  : out std_logic_vector(6 downto 0);
-		level_complete		  : out std_logic
+		score				  : out std_logic_vector(6 downto 0)
     );
 end entity pipe;
 
@@ -46,7 +44,7 @@ begin
     process(vert_s, reset, game_started)
 	begin
 		if (reset = '1') then
-			score_s <= level_score_in;
+			score_s <= "0000000";
             pipe_pos_s <= starting_pos;
         else
             if (rising_edge(vert_s)) then
