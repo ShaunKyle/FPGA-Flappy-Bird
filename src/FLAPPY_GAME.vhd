@@ -1,5 +1,6 @@
 LIBRARY ieee;
-USE ieee.std_logic_1164.all; 
+USE ieee.std_logic_1164.all;
+USE ieee.std_logic_arith.all;
 
 LIBRARY work;
 
@@ -45,6 +46,7 @@ architecture structure of FLAPPY_GAME is
 
 
   --Game signals
+  signal game_over                          : std_logic := '0';
   signal bird_height 				                : std_logic_vector(9 downto 0);
   signal pipe1_height, pipe1_pos            : std_logic_vector(9 downto 0);
   signal pipe2_height, pipe2_pos            : std_logic_vector(9 downto 0);
@@ -53,9 +55,12 @@ architecture structure of FLAPPY_GAME is
   signal rng_pipe_height1, rng_pipe_height2 : std_logic_vector(9 downto 0);
   signal rng_pipe1, rng_pipe2               : std_logic;
   signal flap_btn,pause_btn                 : std_logic;
-  
-  signal new_score								          : integer;
+  signal level_score                        : std_logic_vector(6 downto 0) := CONV_STD_LOGIC_VECTOR(15, 7);
+  signal level_complete                     : std_logic := '0';
+  signal new_score								          : integer := 0;
   signal score1, score2                     : std_logic_vector(6 downto 0);
+  signal pipe_gap                           : std_logic_vector(9 downto 0) := "0010010000";
+  signal pipe_speed                         : std_logic_vector(9 downto 0) := "0000000010";
   
   --Screen signals
   signal screen : std_logic_vector(3 downto 0);
@@ -118,29 +123,32 @@ begin
   -- Game
   --
 
+  -- DISPLAY GAME
   inst_Display_Game: entity work.display_controller 
-  GENERIC MAP (
-    pipe_gap => "0001100111"
-  )
   PORT MAP (
     clk_25,
     bird_height,
     pipe1_pos,pipe1_height,
     pipe2_pos,pipe2_height,
     row,column,
+    pipe_gap,
     r_game,g_game,b_game
   );
 
+  -- BIRD
   object_Bird: entity work.bird PORT MAP (
     vert_sync,
     collision,
-    flap_btn,
+    pb2,
+    level_complete,
     game_start,
-    bird_height
+    bird_height,
+    game_over
   );
 
-  flap_btn <= (not mouse_btnL) and pb2; --Why is it use AND instead of OR? Whatever.
+  ---flap_btn <= pb2; --Why is it use AND instead of OR? Whatever.
 
+  -- PIPE 1
   object_Pipe1: entity work.pipe
   GENERIC MAP (
     starting_pos => "1010000000"
@@ -150,11 +158,13 @@ begin
     vert_sync,
     game_start,
     collision,
+    pipe_speed,
     pipe1_height, pipe1_pos,
     rng_pipe1,
     score1
   );
 
+  -- PIPE 2
   object_Pipe2: entity work.pipe
   GENERIC MAP (
     starting_pos => "1111000000"
@@ -164,19 +174,23 @@ begin
     vert_sync,
     game_start,
     collision,
+    pipe_speed,
     pipe2_height, pipe2_pos,
     rng_pipe2,
     score2
   );
   
+  -- COLLISION
   detect_Collision: entity work.collision PORT MAP (
     clk_25,
     bird_height,
     pipe1_height, pipe1_pos,
     pipe2_height, pipe2_pos,
+    pipe_gap,
     collision
   );
 
+  -- RNG 1
   random_Number_Generator1: entity work.lfsr 
   PORT MAP (
     clk_25,
@@ -184,6 +198,7 @@ begin
     rng_pipe_height1
   );
   
+  -- RNG 2
   random_Number_Generator2: entity work.lfsr 
   PORT MAP (
     clk_25,
@@ -191,8 +206,10 @@ begin
     rng_pipe_height2
   );
 
+  -- SCORE CALC
   score_Display: entity work.seven_seg PORT MAP (
     score1, score2,
+    level_score,
     display_tens,
     display_ones
   );

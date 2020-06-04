@@ -11,17 +11,17 @@ entity collision is
 		pipe1_pos    : in std_logic_vector(9 downto 0);
 		pipe2_height : in std_logic_vector(9 downto 0);
 		pipe2_pos    : in std_logic_vector(9 downto 0);
-		reset			 : out std_logic
+		pipe_gap   	 : in STD_LOGIC_VECTOR(9 downto 0);
+		reset		 : out std_logic
 	);
 end entity collision;
 
 architecture behavioural of collision is
-	constant bird_X 	  : STD_LOGIC_VECTOR (9 downto 0) := "0011000000"; -- X position of the bird
+	constant bird_X 	: STD_LOGIC_VECTOR (9 downto 0) := "0011000000"; -- X position of the bird
 	constant bird_size  : STD_LOGIC_VECTOR (9 downto 0) := "0000010000"; -- Size of the bird
 	constant sky_height : STD_LOGIC_VECTOR (9 downto 0) := "0110101111"; -- Size of the sky
 	constant bar_height : STD_LOGIC_VECTOR (9 downto 0) := "0000000100"; -- Size of the bar
 	constant pipe_width : STD_LOGIC_VECTOR (9 downto 0) := "0000100000"; -- Width of one pipe
-	constant pipe_gap   : STD_LOGIC_VECTOR (9 downto 0) := "0001100000"; -- Gap between two pipes
 	
 	signal groundOkay : BOOLEAN;
 	signal pipe1Okay  : BOOLEAN;

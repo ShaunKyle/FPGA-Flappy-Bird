@@ -4,9 +4,6 @@ use  IEEE.STD_LOGIC_ARITH.all;
 use  IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity display_controller is
-	generic (
-		pipe_gap : STD_LOGIC_VECTOR (9 downto 0) := "0001100111"
-	);
 	port (
 		clk_25								: IN STD_LOGIC;
 		bird_height							: IN STD_LOGIC_VECTOR(9 downto 0);
@@ -14,8 +11,8 @@ entity display_controller is
 		pipe1_height						: IN STD_LOGIC_VECTOR(9 downto 0);
 		pipe2_pos							: IN STD_LOGIC_VECTOR(9 downto 0);
 		pipe2_height						: IN STD_LOGIC_VECTOR(9 downto 0);
-		pixel_row, pixel_column			: IN STD_LOGIC_VECTOR(9 downto 0);
-		
+		pixel_row, pixel_column				: IN STD_LOGIC_VECTOR(9 downto 0);
+		pipe_gap 							: IN STD_LOGIC_VECTOR(9 downto 0);
 		
 		red_out, green_out, blue_out  : OUT STD_LOGIC_VECTOR(3 downto 0)
 	);
@@ -29,7 +26,7 @@ architecture behavioural of display_controller is
 	signal is_pipe1 : BOOLEAN; 
 	signal is_pipe2 : BOOLEAN;
 
-	constant bird_X 	  : STD_LOGIC_VECTOR (9 downto 0) := "0011000000"; -- X position of the bird
+	constant bird_X 	: STD_LOGIC_VECTOR (9 downto 0) := "0011000000"; -- X position of the bird
 	constant bird_size  : STD_LOGIC_VECTOR (9 downto 0) := "0000010000"; -- Size of the bird
 	constant sky_height : STD_LOGIC_VECTOR (9 downto 0) := "0110101111"; -- Size of the sky
 	constant bar_height : STD_LOGIC_VECTOR (9 downto 0) := "0000000100"; -- Size of the bar

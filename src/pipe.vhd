@@ -4,13 +4,14 @@ use  IEEE.STD_LOGIC_ARITH.all;
 use  IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity pipe is
-	 generic (
-		starting_pos		  : std_logic_vector(9 downto 0) := "1010000000"
-	 );
+	generic (
+	starting_pos		  : std_logic_vector(9 downto 0) := "1010000000"
+	);
     port(
 		rng_pipe_height 	  : in  std_logic_vector(9 downto 0);
         vert_s, game_started  : in  std_logic;
-        reset  				  : in  std_logic;
+		reset  				  : in  std_logic;
+		pipe_speed			  : in  std_logic_vector(9 downto 0);
         pipe_height   		  : out std_logic_vector(9 downto 0);
 		pipe_pos              : out std_logic_vector(9 downto 0);
 		rng_pipe		      : out std_logic;
@@ -30,16 +31,20 @@ begin
 	height_validation: process(rng_pipe_height)
 	begin
 	if ((rng_pipe_height < CONV_STD_LOGIC_VECTOR(10, 10)) or (rng_pipe_height > CONV_STD_LOGIC_VECTOR(320, 10))) then
-		pipe_height_s <= CONV_STD_LOGIC_VECTOR(180, 10);
+		if (CONV_INTEGER(rng_pipe_height) mod 2 = 0) then
+			pipe_height_s <= CONV_STD_LOGIC_VECTOR(80, 10);
+		else
+			pipe_height_s <= CONV_STD_LOGIC_VECTOR(300, 10);
+		end if;
 	else
 		pipe_height_s <= rng_pipe_height;
 	end if;
 	end process;
 	 
     process(vert_s, reset, game_started)
-    begin
+	begin
 		if (reset = '1') then
-			score_s <= CONV_STD_LOGIC_VECTOR(0, 7);
+			score_s <= "0000000";
             pipe_pos_s <= starting_pos;
         else
             if (rising_edge(vert_s)) then
@@ -50,7 +55,7 @@ begin
 							score_s <= score_s + CONV_STD_LOGIC_VECTOR(1, 7);
 							score_flag <= '1';
 						end if;
-						pipe_pos_s <= pipe_pos_s - "0000000010";
+						pipe_pos_s <= pipe_pos_s - pipe_speed;
 					else
 						score_flag <= '0';
 						rng_pipe_s <= '1';
@@ -58,7 +63,7 @@ begin
 					end if;
 				end if;
             end if;
-        end if;
+		end if;
     end process;
 	
 	score <= score_s;
