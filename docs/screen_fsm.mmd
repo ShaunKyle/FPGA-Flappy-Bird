@@ -1,0 +1,10 @@
+stateDiagram
+    [*] --> Menu : Power on
+    Menu --> Training : sw1 on
+    Menu --> Game : sw0 on
+
+    Game --> Menu : sw0 off
+    Game --> Win : finish lvl3
+    Win --> Menu : sw0 off
+
+    Training --> Menu : sw1 off

@@ -1,0 +1,15 @@
+stateDiagram
+    [*] --> Idle : Power on
+
+    Idle --> Training : sw1 on
+    Idle --> Level1 : sw0 on
+
+    Level1 --> Level2 : win lvl1
+    Level2 --> Level3 : win lvl2
+    Level3 --> Win : win lvl3
+    Level1 --> Idle : sw0 off
+    Level2 --> Idle : sw0 off
+    Level3 --> Idle : sw0 off
+    Win --> Idle : sw0 off
+
+    Training --> Idle : sw1 off
