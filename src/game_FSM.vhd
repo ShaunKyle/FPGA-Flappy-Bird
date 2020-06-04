@@ -6,7 +6,6 @@ use ieee.std_logic_unsigned.all;
 entity game_FSM is
     port (
         clk_25               : in  std_logic;
-        collision            : in  std_logic;
         score                : in  integer;
         game_over_i          : in  std_logic;
         sw                   : in  std_logic;
@@ -15,7 +14,6 @@ entity game_FSM is
         game_win             : out std_logic;
         main_menu            : out std_logic;
         level_score          : out std_logic_vector(6 downto 0);
-        lives                : out std_logic_vector(1 downto 0);
         pipe_gap, pipe_speed : out std_logic_vector(9 downto 0)
     );
 end entity game_FSM;
@@ -26,26 +24,14 @@ architecture behavioural of game_FSM is
 
     -- architecture signals
     signal state   : state_type := S0;
-    signal lives_s : std_logic_vector(1 downto 0) := "10";
     signal level_complete_s : std_logic;
-    --signal collision_flag : std_logic := '0';
 begin
-    process(clk_25, collision, score, game_over_i, lives_s)
-        variable prev, curr : std_logic;
-        variable collision_flag : std_logic := '0';
+    process(clk_25, score, game_over_i)
     begin
         if (rising_edge(clk_25)) then
-
-            prev := curr;
-            curr := collision;
-            if (prev = '0' and curr = '1') then
-                collision_flag := '1';
-            end if;
-
             if (game_over_i = '1') then
                 state <= s0;
                 game_over <= not(game_over_i);
-                lives_s <= "11";
             elsif (sw = '1') then
                 state <= s5;
             else
@@ -55,13 +41,11 @@ begin
                         if (score = 3) then
                             state <= s1;
                             level_complete_o <= '1';
-                        elsif ((collision_flag = '1') and (lives_s > "01")) then
-                            collision_flag := '0';
-                            lives_s <= lives_s - "01";
-                            state <= s0;
-                        elsif ((collision = '1') and (lives_s = "01")) then
-                            collision_flag := '0';
-                            state <= s3;
+                        -- elsif ((collision_flag = '1') and (count > 1)) then
+                        --     count := count - 1;
+                        --     --state <= s0;
+                        -- elsif ((collision_flag = '1') and (count = 1)) then
+                        --     state <= s3;
                         end if;
 
                     when s1 =>
@@ -69,13 +53,11 @@ begin
                         if (score = 13) then
                             state <= s2;
                             level_complete_o <= '1';
-                        elsif ((collision_flag = '1') and (lives_s > "01")) then
-                            collision_flag := '0';
-                            lives_s <= lives_s - "01";
-                            state <= s1;
-                        elsif ((collision_flag = '1') and (lives_s = "01")) then
-                            collision_flag := '0';
-                            state <= s3;
+                        -- elsif ((collision_flag = '1') and (lives_s > "01")) then
+                        --     lives_s <= lives_s - "01";
+                        --     --state <= s1;
+                        -- elsif ((collision_flag = '1') and (lives_s = "01")) then
+                        --     state <= s3;
                         end if;
 
                     when s2 =>
@@ -83,13 +65,11 @@ begin
                         if (score = 23) then
                             state <= s4;
                             level_complete_o <= '1';
-                        elsif ((collision_flag = '1') and (lives_s > "01")) then
-                            collision_flag := '0';
-                            lives_s <= lives_s - "01";
-                            state <= s2;
-                        elsif ((collision_flag = '1') and (lives_s = "01")) then
-                            collision_flag := '0';
-                            state <= s3;
+                        -- elsif ((collision_flag = '1') and (lives_s > "01")) then
+                        --     lives_s <= lives_s - "01";
+                        --     --state <= s2;
+                        -- elsif ((collision_flag = '1') and (lives_s = "01")) then
+                        --     state <= s3;
                         end if;
 
                     when s3 =>
@@ -107,17 +87,15 @@ begin
         end if;
     end process;
 
-    --collision_flag <= '1' when (collision = '1');
-    -- process(collision)
-    --     variable prev, curr : std_logic;
+
+    -- process(clk_25)
     -- begin
-    --     prev := curr;
-    --     curr := collision;
-    --     if (prev = '0' and curr = '1') then
-    --         collision_flag <= '1';
+    --     if (rising_edge(clk_25)) then
+    --         reg1 <= collision;
+    --         reg2 <= reg1;
     --     end if;
     -- end process;
-
+    -- collision_flag <= reg1 and (not reg2);
 
 
 
@@ -149,8 +127,5 @@ begin
                 null;
         end case;
     end process;
-
-    lives <= lives_s;
-
 end behavioural;
                 

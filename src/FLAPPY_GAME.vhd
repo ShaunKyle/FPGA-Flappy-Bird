@@ -20,7 +20,9 @@ ENTITY FLAPPY_GAME IS
 		g_out         : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
     r_out         : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
     display_tens  : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
-    display_ones  : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
+    display_ones  : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+    seven_seg2 : out std_logic_vector(6 downto 0);
+    seven_seg3 : out std_logic_vector(6 downto 0)
 	);
 END FLAPPY_GAME;
 
@@ -62,7 +64,10 @@ architecture structure of FLAPPY_GAME is
   signal score1, score2                     : std_logic_vector(6 downto 0);
   signal pipe_gap                           : std_logic_vector(9 downto 0) := "0010010000";
   signal pipe_speed                         : std_logic_vector(9 downto 0) := "0000000010";
-  signal lives                              : std_logic_vector(1 downto 0);
+  signal lives                              : integer := 3;
+
+  signal reg1,reg2 : std_logic;
+  signal count : integer;
 
   --Screen signals
   signal screen : std_logic_vector(3 downto 0);
@@ -128,7 +133,6 @@ begin
   -- GAME FSM
   inst_GameFSM: entity work.game_FSM PORT MAP(
     clk_25,
-    collision,
     score,
     game_over_i,
     sw(0),
@@ -144,6 +148,14 @@ begin
   --debug LEDS.
   LEDG(1 downto 0) <= lives;
 
+  -- process(clk_25)
+  --   begin
+  --       if (rising_edge(clk_25)) then
+  --           reg1 <= collision;
+  --           reg2 <= reg1;
+  --       end if;
+  -- end process;
+  -- collision_flag <= reg1 and (not reg2);
 
   -- DISPLAY GAME
   inst_Display_Game: entity work.display_controller 
@@ -235,6 +247,19 @@ begin
     score,
     display_tens,
     display_ones
+  );
+
+  --Deaths display
+  death_disp: entity work.seven_seg PORT MAP(
+    count,
+    seven_seg3,
+    seven_seg2
+  );
+
+  collision_count: entity work.collision_counter PORT MAP(
+    clk,'0',
+    collision,
+    count
   );
   
   --
