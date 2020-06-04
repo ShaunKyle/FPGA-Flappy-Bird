@@ -43,7 +43,6 @@ begin
         
         when Game =>
           s_state_out <= "01";
-
           if (score = 23) then
             state <= Win;
           elsif sw0 = '0' then

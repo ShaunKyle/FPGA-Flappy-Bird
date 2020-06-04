@@ -5,6 +5,7 @@ use  IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity bird is
     port (
+        pause : in std_logic;
         vert_sync   : in std_logic;
         reset  	    : in std_logic;
         lvl_cmp     : in std_logic;
@@ -48,7 +49,7 @@ begin
             acceleration <= "0001";
             game_start_s <= '0';
         else
-            if (rising_edge(vert_sync)) then
+            if (rising_edge(vert_sync) and (pause /= '1')) then
                 --Start game when btn pressed
                 if (left_btn = '0') then
                     game_start_s <= '1';

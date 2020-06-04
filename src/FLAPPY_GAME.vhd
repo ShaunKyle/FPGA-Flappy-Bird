@@ -69,10 +69,7 @@ architecture structure of FLAPPY_GAME is
 
   --Screen signals
   signal screen : std_logic_vector(1 downto 0) := "00";
-  
-  
-
-  signal vert_sync_t : std_logic;
+  signal pause : std_logic;
 begin
   --
   -- Instantiate interface components. Relevant inputs/outputs are exposed as signal wires.
@@ -133,6 +130,9 @@ begin
     b_game when (screen = "01") else
     b_menu;
 
+
+  pause <= '0' when (sw(9) /= '1') else '1';
+
   --
   -- Game
   --
@@ -161,16 +161,7 @@ begin
     pipe_gap,pipe_speed
   );
 
-  --debug LEDS.
 
-  -- process(clk_25)
-  --   begin
-  --       if (rising_edge(clk_25)) then
-  --           reg1 <= collision;
-  --           reg2 <= reg1;
-  --       end if;
-  -- end process;
-  -- collision_flag <= reg1 and (not reg2);
 
   -- DISPLAY GAME
   inst_Display_Game: entity work.display_controller 
@@ -186,7 +177,8 @@ begin
 
   -- BIRD
   object_Bird: entity work.bird PORT MAP (
-    vert_sync_t,
+    pause,
+    vert_sync,
     collision,
     level_complete,
     flap_btn,
@@ -195,8 +187,7 @@ begin
     game_over
   );
 
-  flap_btn <= pb2 AND (NOT mouse_btnL); --Dunno why this works. Just leave it.
-  vert_sync_t <= vert_sync when (sw(9) = '0') else '0';
+  flap_btn <= pb2 AND (NOT mouse_btnL);
 
   -- PIPE 1
   object_Pipe1: entity work.pipe
@@ -204,8 +195,9 @@ begin
     starting_pos => "1010000000"
   )
   PORT MAP (
+    pause,
     rng_pipe_height1,
-    vert_sync_t,
+    vert_sync,
     game_start,
     collision or level_complete,
     pipe_speed,
@@ -220,8 +212,9 @@ begin
     starting_pos => "1111000000"
   )
   PORT MAP (
+    pause,
     rng_pipe_height2,
-    vert_sync_t,
+    vert_sync,
     game_start,
     collision or level_complete,
     pipe_speed,

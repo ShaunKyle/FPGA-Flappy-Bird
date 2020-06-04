@@ -8,6 +8,7 @@ entity pipe is
 	starting_pos		  : std_logic_vector(9 downto 0) := "1010000000"
 	);
     port(
+			pause : in std_logic;
 		rng_pipe_height 	  : in  std_logic_vector(9 downto 0);
         vert_s, game_started  : in  std_logic;
 		reset  				  : in  std_logic;
@@ -48,7 +49,7 @@ begin
 			pipe_pos_s <= starting_pos;
 			score_flag <= '0';
         else
-            if (rising_edge(vert_s)) then
+            if (rising_edge(vert_s) and (pause /= '1')) then
 				if (game_started = '1') then
 					if (pipe_pos_s > "0000000000") then
 						rng_pipe_s <= '0';
