@@ -44,18 +44,6 @@ architecture structure of FLAPPY_GAME is
 
 
   --Game signals
-<<<<<<< HEAD
-  signal bird_height : std_logic_vector(9 downto 0);
-  signal pipe_height, pipe_pos : std_logic_vector(9 downto 0);
-  signal game_start : std_logic := '0';
-  signal collision : std_logic := '0';
-
-  signal flap_btn,pause_btn : std_logic;
-
-  --Screen signals
-  signal screen : std_logic_vector(1 downto 0);
-
-=======
   signal bird_height 				                : std_logic_vector(9 downto 0);
   signal pipe1_height, pipe1_pos            : std_logic_vector(9 downto 0);
   signal pipe2_height, pipe2_pos            : std_logic_vector(9 downto 0);
@@ -68,7 +56,9 @@ architecture structure of FLAPPY_GAME is
   signal new_score								          : integer;
   signal score1, score2                     : std_logic_vector(6 downto 0);
   
->>>>>>> 8a83e5b7945f98e26037099631a6e26ebf2f661f
+  --Screen signals
+  signal screen : std_logic_vector(1 downto 0);
+  
 begin
   --
   -- Instantiate interface components. Relevant inputs/outputs are exposed as signal wires.
@@ -103,7 +93,6 @@ begin
   -- Screen multiplexer
   --
   r <= 
-<<<<<<< HEAD
     r_game when (screen = "01") else
     r_menu;
   g <= 
@@ -111,15 +100,6 @@ begin
     g_menu;
   b <= 
     b_game when (screen = "01") else
-=======
-    r_game when (true) else
-    r_menu;
-  g <= 
-    g_game when (true) else
-    g_menu;
-  b <= 
-    b_game when (true) else
->>>>>>> 8a83e5b7945f98e26037099631a6e26ebf2f661f
     b_menu;
 
   --
