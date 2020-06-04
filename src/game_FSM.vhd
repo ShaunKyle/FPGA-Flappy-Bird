@@ -8,7 +8,7 @@ entity game_FSM is
         clk_25               : in  std_logic;
         score                : in  integer;
         game_over_i          : in  std_logic;
-        sw                   : in  std_logic;
+        training             : in  std_logic;
         game_over            : out std_logic;   
         level_complete_o     : out std_logic;
         game_win             : out std_logic;
@@ -32,12 +32,11 @@ begin
             if (game_over_i = '1') then
                 state <= s0;
                 game_over <= not(game_over_i);
-            elsif (sw = '1') then
+            elsif (training = '1') then
                 state <= s5;
             else
                 case state is
                     when s0 =>
-                        game_win <= '0';
                         level_complete_o <= '0';
                         if (score = 3) then
                             state <= s1;
@@ -66,18 +65,25 @@ begin
                         if (score = 23) then
                             state <= s4;
                             level_complete_o <= '1';
+                        -- elsif ((collision_flag = '1') and (lives_s > "01")) then
+                        --     lives_s <= lives_s - "01";
+                        --     --state <= s2;
+                        -- elsif ((collision_flag = '1') and (lives_s = "01")) then
+                        --     state <= s3;
                         end if;
 
                     when s3 =>
                         game_over <= '1';
 
                     when s4 =>
-                        level_complete_o <= '0';
                         game_win <= '1';
-                        state <= s0;
                     
                     when s5 =>
+                    level_complete_o <= '0';
+                    if (score = 10) then
                         state <= s0;
+                        level_complete_o <= '1';
+                    end if;
                 end case;
             end if;
         end if;
@@ -98,7 +104,7 @@ begin
     process (state)
     begin
         case state is
-            when s0 =>
+            when s0|s5 =>
                 -- pipe_gap    <= "0010010000";
                 -- pipe_speed  <= "0000000010";
                 -- level_score <=    "0000000";

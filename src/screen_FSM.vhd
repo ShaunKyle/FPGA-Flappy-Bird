@@ -23,7 +23,7 @@ architecture behaviour of screen_FSM is
   signal train_out : std_logic;
 begin
 
-process(Clk,game_win) is
+process(Clk,game_win, pb0, pb1) is
 begin
   if rising_edge(Clk) then
     --Negative reset
@@ -39,7 +39,7 @@ begin
             state <= Game;
           end if;
 
-          if pb1 = '0' then
+          if pb1 = '0' then 
             state <= Training;
           end if;
         
@@ -56,8 +56,12 @@ begin
           end if;
         
         when Training =>
-          
           output_state <= "10";
+
+          --Rage quit btn
+          if pb1 = '0' then
+            state <= Menu;
+          end if;
 
         when Win =>
           output_state <= "11";

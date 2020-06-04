@@ -63,6 +63,7 @@ architecture structure of FLAPPY_GAME is
   signal score1, score2                     : std_logic_vector(6 downto 0);
   signal pipe_gap                           : std_logic_vector(9 downto 0) := "0010010000";
   signal pipe_speed                         : std_logic_vector(9 downto 0) := "0000000010";
+  signal training                           : std_logic;
 
   signal count : integer;
 
@@ -110,7 +111,6 @@ begin
     Clk, '1',
     game_win,
     pb0, pb1,
-
     screen
   );
 
@@ -133,7 +133,7 @@ begin
     clk_25,
     score,
     game_over_i,
-    sw(0),
+    not(pb1),
     game_over_i,
     level_complete,
     game_win,
