@@ -14,36 +14,22 @@ end entity collision_counter;
 
 architecture arc1 of collision_counter is
 
-  signal reg1,reg2 : std_logic;
-  signal edge : std_logic;
-  signal s_count : integer := 0;
+  signal prev_coll : std_logic;
+  signal s_count : integer;
 begin
 
-  process (clk) is
-  begin
-    if (rising_edge(clk)) then
-      reg1 <= collision;
-      reg2 <= reg1;
-    end if;
-  end process;
 
-  edge <= reg1 and (not reg2);
-  
-  process (edge) is
-  begin
-    if (edge = '1') then
-      s_count <= s_count + 1;
-    end if;
-  end process;
-
-  count <= s_count;
-
-
-  process (clk, reset) is
+  process (clk, reset, collision, prev_coll, s_count) is
   begin
     if (rising_edge(clk)) then
       if (reset = '1') then
-        s_count <= 0;
+        prev_coll <= '0';
+      else
+        prev_coll <= collision;
+
+        if (collision = '1' and prev_coll = '0') then
+          s_count <= s_count + 1;
+        end if;
       end if;
     end if;
   end process;

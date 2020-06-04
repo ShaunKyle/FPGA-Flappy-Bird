@@ -141,12 +141,10 @@ begin
     game_win,
     main_menu,
     level_score,
-    lives,
     pipe_gap, pipe_speed
   );
 
   --debug LEDS.
-  LEDG(1 downto 0) <= lives;
 
   -- process(clk_25)
   --   begin
@@ -257,7 +255,7 @@ begin
   );
 
   collision_count: entity work.collision_counter PORT MAP(
-    clk,'0',
+    clk_25,'0',
     collision,
     count
   );

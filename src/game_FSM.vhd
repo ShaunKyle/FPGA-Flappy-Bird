@@ -77,10 +77,8 @@ begin
 
                     when s4 =>
                         game_win <= '1';
-                        lives_s <= "11";
                     
                     when s5 =>
-                        lives_s <= "01";
                         state <= s0;
                 end case;
             end if;
