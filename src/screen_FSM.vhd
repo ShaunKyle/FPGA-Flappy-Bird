@@ -22,7 +22,7 @@ architecture behaviour of screen_FSM is
   signal state : t_screens := Menu;
 begin
 
-process(Clk) is
+process(Clk,sw0,sw1) is
 begin
   if rising_edge(Clk) then
     --Negative reset
@@ -58,11 +58,6 @@ begin
           output_state <= "10";
           --Rage quit btn
           if sw1 = '0' then
-            state <= Menu;
-          end if;
-
-          --Rage quit btn
-          if pb1 = '0' then
             state <= Menu;
           end if;
 

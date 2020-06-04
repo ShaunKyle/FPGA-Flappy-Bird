@@ -68,7 +68,7 @@ architecture structure of FLAPPY_GAME is
   signal count : integer;
 
   --Screen signals
-  signal screen : std_logic_vector(1 downto 0);
+  signal screen : std_logic_vector(1 downto 0) := "00";
 
 
 
@@ -107,12 +107,14 @@ begin
   -- Screen multiplexer
   --
   inst_ScreenFSM: entity work.screen_FSM PORT MAP(
-    Clk, '1',
+    Clk_25, '1',
     game_win,
     sw(0), sw(1),
 
     screen
   );
+
+  LEDG <= sw;
 
   r <= 
     r_game when ((screen = "01") or (screen = "10")) else
@@ -246,12 +248,12 @@ begin
     display_ones
   );
 
-  --Deaths display
-  -- death_disp: entity work.seven_seg PORT MAP(
-  --   count,
-  --   seven_seg3,
-  --   seven_seg2
-  -- );
+  --unused display
+  unused_disp: entity work.seven_seg PORT MAP(
+    0,
+    seven_seg3,
+    seven_seg2
+  );
 
   -- collision_count: entity work.collision_counter PORT MAP(
   --   clk_25,'0',
