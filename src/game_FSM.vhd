@@ -109,7 +109,7 @@ begin
                 -- pipe_gap    <= "0001111000";
                 -- pipe_speed  <= "0000000010";
                 -- level_score <=    "0001111";
-                pipe_gap    <= conv_std_logic_vector(120,10);
+                pipe_gap    <= conv_std_logic_vector(110,10);
                 pipe_speed  <= conv_std_logic_vector(2,10);
                 level_score <= conv_std_logic_vector(10,7);
             when s2 =>
