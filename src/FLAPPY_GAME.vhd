@@ -44,6 +44,7 @@ architecture structure of FLAPPY_GAME is
 
 
   --Game signals
+  signal game_over                          : std_logic;
   signal bird_height 				                : std_logic_vector(9 downto 0);
   signal pipe1_height, pipe1_pos            : std_logic_vector(9 downto 0);
   signal pipe2_height, pipe2_pos            : std_logic_vector(9 downto 0);
@@ -121,7 +122,8 @@ begin
     collision,
     flap_btn,
     game_start,
-    bird_height
+    bird_height,
+    game_over
   );
 
   flap_btn <= (not mouse_btnL) and pb2; --Why is it use AND instead of OR? Whatever.

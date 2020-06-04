@@ -8,14 +8,18 @@ entity bird is
         vert_sync   : in std_logic;
 		reset  	    : in std_logic;
         left_btn    : in std_logic;
+        next_level  : in std_logic;
         game_start  : out std_logic;
-        bird_height : out std_logic_vector(9 downto 0)
+        bird_height : out std_logic_vector(9 downto 0);
+        game_over   : out std_logic
     );
 end entity bird;
 
 architecture behavioural of bird is
     -- keeps the bird frozen until game start
     signal game_start_s : std_logic := '1';
+    signal lives        : std_logic_vector(1 downto 0) := "11";
+    signal game_over_s  : std_logic := '0';
 
     -- height signals;
     signal bird_height_s : std_logic_vector(9 downto 0) := "0001111000";
@@ -35,14 +39,24 @@ architecture behavioural of bird is
     signal Q0, Q1, Q2 : std_logic := '0';
     signal stop_flap : std_logic := '0';
 begin
-    process(vert_sync, reset, game_start_s)
+    process(vert_sync, reset, game_start_s, next_level)
         variable loop_count : integer := 0;
     begin
         if (reset = '1') then
             bird_height_s <= init_height;
             bird_speed <= init_speed;
             acceleration <= "0001";
-				game_start_s <= '0';
+            game_start_s <= '0';
+            if (lives = "01") then
+                game_over_s <= '1';
+            else
+                lives <= lives - "01";
+            end if;
+        elsif (next_level = '1') then
+            bird_height_s <= init_height;
+            bird_speed <= init_speed;
+            acceleration <= "0001";
+            game_start_s <= '0';
         else 
             if (rising_edge(vert_sync)) then
                 --Start game when btn pressed
@@ -85,5 +99,5 @@ begin
 
     bird_height <= bird_height_s;
     game_start <= game_start_s;
-
+    game_over <= game_over_s;
 end behavioural;

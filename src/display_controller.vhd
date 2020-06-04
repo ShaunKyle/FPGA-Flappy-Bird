@@ -28,7 +28,7 @@ architecture behavioural of display_controller is
 	signal is_pipe1 : BOOLEAN; 
 	signal is_pipe2 : BOOLEAN;
 
-	constant bird_X 	  : STD_LOGIC_VECTOR (9 downto 0) := "0011000000"; -- X position of the bird
+	constant bird_X 	: STD_LOGIC_VECTOR (9 downto 0) := "0011000000"; -- X position of the bird
 	constant bird_size  : STD_LOGIC_VECTOR (9 downto 0) := "0000010000"; -- Size of the bird
 	constant sky_height : STD_LOGIC_VECTOR (9 downto 0) := "0110101111"; -- Size of the sky
 	constant bar_height : STD_LOGIC_VECTOR (9 downto 0) := "0000000100"; -- Size of the bar
