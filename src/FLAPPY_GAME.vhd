@@ -50,6 +50,10 @@ architecture structure of FLAPPY_GAME is
   signal collision : std_logic := '0';
 
   signal flap_btn,pause_btn : std_logic;
+
+  --Screen signals
+  signal screen : std_logic_vector(1 downto 0);
+
 begin
   --
   -- Instantiate interface components. Relevant inputs/outputs are exposed as signal wires.
@@ -89,13 +93,13 @@ begin
   -- Screen multiplexer
   --
   r <= 
-    r_game when (false) else
+    r_game when (screen = "01") else
     r_menu;
   g <= 
-    g_game when (false) else
+    g_game when (screen = "01") else
     g_menu;
   b <= 
-    b_game when (false) else
+    b_game when (screen = "01") else
     b_menu;
 
   --
