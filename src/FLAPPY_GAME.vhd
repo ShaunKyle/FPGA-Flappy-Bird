@@ -35,7 +35,6 @@ architecture structure of FLAPPY_GAME is
   signal r,g,b : std_logic_vector(3 downto 0);
   signal r_menu,g_menu,b_menu : std_logic_vector(3 downto 0);
   signal r_game,g_game,b_game : std_logic_vector(3 downto 0);
-  signal r_pause,g_pause,b_pause : std_logic_vector(3 downto 0);
   signal row,column : std_logic_vector(9 downto 0);
   signal vert_sync, horiz_sync : std_logic;
 
@@ -44,7 +43,7 @@ architecture structure of FLAPPY_GAME is
   signal mouse_row, mouse_col : std_logic_vector(9 downto 0);
 
   --Seven seg
-  signal in_seg0,in_seg1,in_seg2,in_seg3 : std_logic_vector(3 downto 0);
+  --signal in_seg0,in_seg1,in_seg2,in_seg3 : std_logic_vector(3 downto 0);
 
 
   --Game signals
@@ -64,14 +63,11 @@ architecture structure of FLAPPY_GAME is
   signal score1, score2                     : std_logic_vector(6 downto 0);
   signal pipe_gap                           : std_logic_vector(9 downto 0) := "0010010000";
   signal pipe_speed                         : std_logic_vector(9 downto 0) := "0000000010";
-  signal lives                              : integer := 3;
 
-  signal reg1,reg2 : std_logic;
   signal count : integer;
 
   --Screen signals
-  signal screen : std_logic_vector(3 downto 0);
-  signal text_out : std_logic;
+  signal screen : std_logic_vector(1 downto 0);
 begin
   --
   -- Instantiate interface components. Relevant inputs/outputs are exposed as signal wires.
@@ -107,23 +103,20 @@ begin
   --
   inst_ScreenFSM: entity work.screen_FSM PORT MAP(
     Clk, '1',
-
+    game_win,
     pb0, pb1,
 
     screen
   );
 
   r <= 
-    r_game when ((screen = "0001") or (screen = "0010") or (screen = "0011")) else
-    r_pause when (screen = "0111") else
+    r_game when ((screen = "01") or (screen = "10")) else
     r_menu;
   g <= 
-    g_game when (screen = "0001") else
-    g_pause when (screen = "0111") else
+    g_game when ((screen = "01") or (screen = "10")) else
     g_menu;
   b <= 
-    b_game when (screen = "0001") else
-    b_pause when (screen = "0111") else
+    b_game when ((screen = "01") or (screen = "10")) else
     b_menu;
 
   --

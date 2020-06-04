@@ -5,24 +5,25 @@ entity screen_FSM is
   port(
     Clk,Reset : in std_logic;
     pb0,pb1 : in std_logic;
+    game_win : in std_logic;
     -- click_game, click_train : in std_logic;
     -- train_lose : in std_logic;
     -- game_win, game_pause, game_lose : in std_logic;
 
-    output_state : out std_logic_vector(3 downto 0) := "0000"
-    -- pipe_speed : out integer; --Increase difficulty every level
+    output_state : out std_logic_vector(1 downto 0) := "00"
+    --is_train_mode : out std_logic := '0';
 
   );
 end entity screen_FSM;
 
 
 architecture behaviour of screen_FSM is 
-  type t_screens is (Menu, Training, Level1, Level2, Level3, Win, Lose, Pause);
-  signal state, prev_state : t_screens := Menu;
-
+  type t_screens is (Menu, Training, Game, Win);
+  signal state : t_screens := Menu;
+  signal train_out : std_logic;
 begin
 
-process(Clk) is
+process(Clk,game_win) is
 begin
   if rising_edge(Clk) then
     --Negative reset
@@ -32,52 +33,34 @@ begin
     else
       case state is
         when Menu =>
-          output_state <= "0000";
+          output_state <= "00";
 
           if pb0 = '0' then
-            state <= Level1;
+            state <= Game;
           end if;
 
           if pb1 = '0' then
             state <= Training;
           end if;
         
-        when Level1 =>
-          output_state <= "0001";
+        when Game =>
+          output_state <= "01";
 
+          if (game_win = '1') then
+            state <= Menu;
+          end if;
+
+          --Rage quit btn
           if pb1 = '0' then
-            prev_state <= Level1;
-            state <= Pause;
+            state <= Menu;
           end if;
         
-        when Level2 =>
-          output_state <= "0010";
-
-          if pb1 = '0' then
-            prev_state <= Level2;
-            state <= Pause;
-          end if;
-        
-        when Level3 =>
-          output_state <= "0011";
-
-          if pb1 = '0' then
-            prev_state <= Level3;
-            state <= Pause;
-          end if;
+        when Training =>
+          
+          output_state <= "10";
 
         when Win =>
-          output_state <= "0100";
-        when Lose =>
-          output_state <= "0101";  
-        when Training =>
-          output_state <= "0110";
-        when Pause =>
-          output_state <= "0111";
-
-          if pb0 = '0' then
-            state <= prev_state;
-          end if;
+          output_state <= "11";
         
       end case;
     end if;
