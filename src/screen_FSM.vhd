@@ -61,6 +61,11 @@ begin
             state <= Menu;
           end if;
 
+          --Rage quit btn
+          if pb1 = '0' then
+            state <= Menu;
+          end if;
+
         when Win =>
           output_state <= "11";
         
