@@ -72,7 +72,7 @@ architecture structure of FLAPPY_GAME is
 
 
 
-  signal clk_25_t : std_logic;
+  signal vert_sync_t : std_logic;
 begin
   --
   -- Instantiate interface components. Relevant inputs/outputs are exposed as signal wires.
@@ -81,10 +81,9 @@ begin
   inst_PLL: entity work.altpll0 PORT MAP (
 		areset	 => '0',
 		inclk0	 => clk,
-		c0	 => clk_25_t
+		c0	 => clk_25
 		--locked	 => locked_sig
   );
-  clk_25 <= clk_25_t when (sw(9) = '0') else '0';
 
   inst_VGA_sync: entity work.vga_sync PORT MAP (
     clk_25,
@@ -167,7 +166,7 @@ begin
 
   -- BIRD
   object_Bird: entity work.bird PORT MAP (
-    vert_sync,
+    vert_sync_t,
     collision,
     level_complete,
     flap_btn,
@@ -177,6 +176,7 @@ begin
   );
 
   flap_btn <= pb2 AND (NOT mouse_btnL); --Dunno why this works. Just leave it.
+  vert_sync_t <= vert_sync when (sw(9) = '0') else '0';
 
   -- PIPE 1
   object_Pipe1: entity work.pipe
@@ -185,7 +185,7 @@ begin
   )
   PORT MAP (
     rng_pipe_height1,
-    vert_sync,
+    vert_sync_t,
     game_start,
     collision or level_complete,
     pipe_speed,
@@ -201,7 +201,7 @@ begin
   )
   PORT MAP (
     rng_pipe_height2,
-    vert_sync,
+    vert_sync_t,
     game_start,
     collision or level_complete,
     pipe_speed,
