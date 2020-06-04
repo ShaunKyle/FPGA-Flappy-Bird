@@ -7,7 +7,8 @@ entity seven_seg is
     port (
 		score1, score2 : in std_logic_vector(6 downto 0);
 		level_score	   : in std_logic_vector(6 downto 0);
-        display_tens   : out std_logic_vector(6 downto 0);
+		score		   : out integer;
+		display_tens   : out std_logic_vector(6 downto 0);
         display_ones   : out std_logic_vector(6 downto 0)
     );
 end entity seven_seg;
@@ -23,6 +24,7 @@ begin
 		variable ones_v : integer := 0;
 	begin
 		number <= conv_integer(unsigned(score1)) + conv_integer(unsigned(score2)) + conv_integer(unsigned(level_score));
+		score <= number;
 		tens_v := number/10;
 		ones_v := number - (number/10)*10;
     	bcd_number_ones <= CONV_STD_LOGIC_VECTOR(ones_v, 4);
