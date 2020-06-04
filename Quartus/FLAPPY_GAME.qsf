@@ -130,6 +130,7 @@ set_location_assignment PIN_B18 -to seven_seg3[0]
 set_global_assignment -name OPTIMIZE_HOLD_TIMING "ALL PATHS"
 set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 set_global_assignment -name FITTER_EFFORT "STANDARD FIT"
+set_global_assignment -name VHDL_FILE ../src/lsfr_small.vhd
 set_global_assignment -name VHDL_FILE ../src/game_FSM_new.vhd
 set_global_assignment -name VHDL_FILE ../src/display_win.vhd
 set_global_assignment -name VHDL_FILE ../src/interfaces/image_rom.vhd

@@ -236,7 +236,7 @@ begin
   );
 
   -- RNG 1
-  random_Number_Generator1: entity work.lfsr 
+  random_Number_Generator1: entity work.lfsr_small 
   PORT MAP (
     clk_25,
     rng_pipe1,
@@ -244,7 +244,7 @@ begin
   );
   
   -- RNG 2
-  random_Number_Generator2: entity work.lfsr 
+  random_Number_Generator2: entity work.lfsr_small 
   PORT MAP (
     clk_25,
     rng_pipe2,
