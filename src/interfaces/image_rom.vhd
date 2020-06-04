@@ -15,7 +15,7 @@ ENTITY image_rom IS
 	PORT (
 		pixel_x, pixel_y, show_x, show_y	:	IN STD_LOGIC_VECTOR (9 DOWNTO 0);
 		clock								: 	IN STD_LOGIC;
-		RGB									:	OUT STD_LOGIC_VECTOR(15 downto 0)
+		RGB									:	OUT STD_LOGIC_VECTOR(14 downto 0)
 	);
 END image_rom;
 
@@ -23,7 +23,7 @@ ARCHITECTURE SYN OF image_rom IS
 
 	constant ADDR_WIDTH : natural := integer(ceil(log2(real(width*height))));
 
-	SIGNAL rom_data		: STD_LOGIC_VECTOR (15 DOWNTO 0);
+	SIGNAL rom_data		: STD_LOGIC_VECTOR (14 DOWNTO 0);
 	SIGNAL rom_address	: STD_LOGIC_VECTOR (ADDR_WIDTH-1 DOWNTO 0);
 
 	COMPONENT altsyncram
@@ -46,7 +46,7 @@ ARCHITECTURE SYN OF image_rom IS
 	PORT (
 		clock0		: IN STD_LOGIC ;
 		address_a	: IN STD_LOGIC_VECTOR (ADDR_WIDTH-1 DOWNTO 0);
-		q_a			: OUT STD_LOGIC_VECTOR (15 DOWNTO 0)
+		q_a			: OUT STD_LOGIC_VECTOR (14 DOWNTO 0)
 	);
 	END COMPONENT;
 

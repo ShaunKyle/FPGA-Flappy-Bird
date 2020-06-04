@@ -41,7 +41,7 @@ set_global_assignment -name DEVICE EP3C16F484C6
 set_global_assignment -name TOP_LEVEL_ENTITY FLAPPY_GAME
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0 SP1"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "13:26:39  JUNE 01, 2020"
-set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
+set_global_assignment -name LAST_QUARTUS_VERSION 13.1
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
@@ -130,11 +130,13 @@ set_location_assignment PIN_B18 -to seven_seg3[0]
 set_global_assignment -name OPTIMIZE_HOLD_TIMING "ALL PATHS"
 set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 set_global_assignment -name FITTER_EFFORT "STANDARD FIT"
+set_global_assignment -name VHDL_FILE ../src/interfaces/image_rom.vhd
+set_global_assignment -name VHDL_FILE ../src/image_draw.vhd
+set_global_assignment -name VHDL_FILE ../src/display_bird.vhd
 set_global_assignment -name VHDL_FILE ../src/display_game.vhd
 set_global_assignment -name VHDL_FILE ../src/lsfr_small.vhd
 set_global_assignment -name VHDL_FILE ../src/game_FSM_new.vhd
 set_global_assignment -name VHDL_FILE ../src/display_win.vhd
-set_global_assignment -name VHDL_FILE ../src/interfaces/image_rom.vhd
 set_global_assignment -name VHDL_FILE ../src/draw_big_char.vhd
 set_global_assignment -name VHDL_FILE ../src/draw_char.vhd
 set_global_assignment -name VHDL_FILE ../src/screen_FSM.vhd
