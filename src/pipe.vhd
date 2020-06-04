@@ -45,7 +45,8 @@ begin
 	begin
 		if (reset = '1') then
 			score_s <= "0000000";
-            pipe_pos_s <= starting_pos;
+			pipe_pos_s <= starting_pos;
+			score_flag <= '0';
         else
             if (rising_edge(vert_s)) then
 				if (game_started = '1') then

@@ -6,9 +6,10 @@ use  IEEE.STD_LOGIC_UNSIGNED.all;
 entity bird is
     port (
         vert_sync   : in std_logic;
-		reset  	    : in std_logic;
+        reset  	    : in std_logic;
+        lvl_cmp     : in std_logic;
         left_btn    : in std_logic;
-        lives       : in std_logic;
+        lives       : in std_logic_vector(1 downto 0);
         game_start  : out std_logic;
         bird_height : out std_logic_vector(9 downto 0);
         game_over   : out std_logic
@@ -42,7 +43,7 @@ begin
     process(vert_sync, reset, game_start_s)
         variable loop_count : integer := 0;
     begin
-        if (reset = '1') then
+        if ((reset = '1') or (lvl_cmp = '1')) then
             bird_height_s <= init_height;
             bird_speed <= init_speed;
             acceleration <= "0001";
