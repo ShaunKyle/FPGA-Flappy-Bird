@@ -16,6 +16,7 @@ entity display_controller is
 		pipe2_height						: IN STD_LOGIC_VECTOR(9 downto 0);
 		pixel_row, pixel_column			: IN STD_LOGIC_VECTOR(9 downto 0);
 		
+		
 		red_out, green_out, blue_out  : OUT STD_LOGIC_VECTOR(3 downto 0)
 	);
 end entity display_controller;

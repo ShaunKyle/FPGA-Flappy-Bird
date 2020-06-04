@@ -9,7 +9,9 @@ entity display_menu is
     pixel_row, pixel_column : in std_logic_vector(9 downto 0);
 
     cursor_x, cursor_y : in std_logic_vector(9 downto 0);
+		cursor_btnL : in std_logic;
 		
+
 		
 		red_out, green_out, blue_out  : OUT STD_LOGIC_VECTOR(3 downto 0)
 	);
