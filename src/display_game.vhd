@@ -3,7 +3,7 @@ use  IEEE.STD_LOGIC_1164.all;
 use  IEEE.STD_LOGIC_ARITH.all;
 use  IEEE.STD_LOGIC_UNSIGNED.all;
 
-entity display_controller is
+entity display_game is
 	port (
 		clk_25								: IN STD_LOGIC;
 		bird_height							: IN STD_LOGIC_VECTOR(9 downto 0);
@@ -16,9 +16,9 @@ entity display_controller is
 		
 		red_out, green_out, blue_out  : OUT STD_LOGIC_VECTOR(3 downto 0)
 	);
-end entity display_controller;
+end entity display_game;
 
-architecture behavioural of display_controller is
+architecture behavioural of display_game is
 
 	signal is_bird  : BOOLEAN; 
 	signal is_grass : BOOLEAN; 

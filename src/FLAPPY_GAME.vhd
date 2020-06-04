@@ -164,7 +164,7 @@ begin
 
 
   -- DISPLAY GAME
-  inst_Display_Game: entity work.display_controller 
+  inst_Display_Game: entity work.display_game 
   PORT MAP (
     clk_25,
     bird_height,
