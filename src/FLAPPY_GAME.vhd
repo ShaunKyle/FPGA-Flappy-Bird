@@ -68,6 +68,10 @@ architecture structure of FLAPPY_GAME is
 
   --Screen signals
   signal screen : std_logic_vector(1 downto 0);
+
+
+
+  signal clk_25_t : std_logic;
 begin
   --
   -- Instantiate interface components. Relevant inputs/outputs are exposed as signal wires.
@@ -76,9 +80,10 @@ begin
   inst_PLL: entity work.altpll0 PORT MAP (
 		areset	 => '0',
 		inclk0	 => clk,
-		c0	 => clk_25
+		c0	 => clk_25_t
 		--locked	 => locked_sig
   );
+  clk_25 <= clk_25_t when (sw(9) = '0') else '0';
 
   inst_VGA_sync: entity work.vga_sync PORT MAP (
     clk_25,
