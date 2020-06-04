@@ -12,7 +12,6 @@ entity game_FSM is
         game_over            : out std_logic;   
         level_complete_o     : out std_logic;
         game_win             : out std_logic;
-        main_menu            : out std_logic;
         level_score          : out std_logic_vector(6 downto 0);
         pipe_gap, pipe_speed : out std_logic_vector(9 downto 0)
     );
@@ -77,6 +76,7 @@ begin
 
                     when s4 =>
                         game_win <= '1';
+
                     
                     when s5 =>
                     level_complete_o <= '0';

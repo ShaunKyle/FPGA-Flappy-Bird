@@ -35,6 +35,7 @@ architecture structure of FLAPPY_GAME is
   signal r,g,b : std_logic_vector(3 downto 0);
   signal r_menu,g_menu,b_menu : std_logic_vector(3 downto 0);
   signal r_game,g_game,b_game : std_logic_vector(3 downto 0);
+  signal r_win,g_win,b_win : std_logic_vector(3 downto 0);
   signal row,column : std_logic_vector(9 downto 0);
   signal vert_sync, horiz_sync : std_logic;
 
@@ -48,7 +49,6 @@ architecture structure of FLAPPY_GAME is
 
   --Game signals
   signal game_over, game_over_i, game_win   : std_logic := '0';
-  signal main_menu                          : std_logic := '0';
   signal bird_height 				                : std_logic_vector(9 downto 0);
   signal pipe1_height, pipe1_pos            : std_logic_vector(9 downto 0);
   signal pipe2_height, pipe2_pos            : std_logic_vector(9 downto 0);
@@ -60,7 +60,7 @@ architecture structure of FLAPPY_GAME is
   signal level_score                        : std_logic_vector(6 downto 0) := CONV_STD_LOGIC_VECTOR(0, 7);
   signal level_complete                     : std_logic;
   signal score								              : integer := 0;
-  signal score1, score2                     : std_logic_vector(6 downto 0);
+  signal score1, score2                     : std_logic_vector(6 downto 0) := "0000000";
   signal pipe_gap                           : std_logic_vector(9 downto 0) := "0010010000";
   signal pipe_speed                         : std_logic_vector(9 downto 0) := "0000000010";
   signal is_train_mode : std_logic;
@@ -109,7 +109,8 @@ begin
   inst_ScreenFSM: entity work.screen_FSM PORT MAP(
     Clk, '1',
     sw(0),sw(1),
-    game_win,
+    --game_win,
+    score,
     screen,
     is_train_mode
   );
@@ -117,14 +118,17 @@ begin
   LEDG <= sw;
 
   r <= 
+    r_win when (screen = "11") else
     r_game when (screen = "10") else
     r_game when (screen = "01") else
     r_menu;
   g <= 
+    g_win when (screen = "11") else
     g_game when (screen = "10") else
     g_game when (screen = "01") else
     g_menu;
   b <= 
+    b_win when (screen = "11") else
     b_game when (screen = "10") else
     b_game when (screen = "01") else
     b_menu;
@@ -134,17 +138,27 @@ begin
   --
 
   -- GAME FSM
-  inst_GameFSM: entity work.game_FSM PORT MAP(
+  -- inst_GameFSM: entity work.game_FSM PORT MAP(
+  --   clk_25,
+  --   score,
+  --   game_over_i,
+  --   is_train_mode,
+  --   game_over_i,
+  --   level_complete,
+  --   game_win,
+  --   level_score,
+  --   pipe_gap, pipe_speed
+  -- );
+
+  inst_Game_FSM_new: entity work.game_FSM_new PORT MAP(
     clk_25,
+    sw(0),sw(1),
     score,
-    game_over_i,
     is_train_mode,
-    game_over_i,
     level_complete,
     game_win,
-    main_menu,
     level_score,
-    pipe_gap, pipe_speed
+    pipe_gap,pipe_speed
   );
 
   --debug LEDS.
@@ -275,23 +289,14 @@ begin
   );
 
   --
-  -- Pause screen
+  -- Win screen
   --
-  -- inst_Pause_disp: entity work.pause_disp PORT MAP (
-  --   clk_25,row,column,
-  --   r_pause,g_pause,b_pause
-  -- );
+  inst_Display_Win: entity work.display_win PORT MAP (
+    clk_25,row,column,
+    r_win,g_win,b_win
+  );
 
-  -- inst_char: entity work.draw_char PORT MAP (
-  --   clk_25,"010000",
-  --   32,32,
-  --   row,column,
-  --   text_out
-  -- );
 
-  -- r_pause <= "0000" when text_out = '1' else "1111";
-  -- g_pause <= "0000" when text_out = '1' else "1111";
-  -- b_pause <= "0000" when text_out = '1' else "1111";
 
   --inst_img: entity work.image
 

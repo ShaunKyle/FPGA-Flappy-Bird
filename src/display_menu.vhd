@@ -46,9 +46,11 @@ architecture behaviour of display_menu is
 	constant menu_color : std_logic_vector(11 downto 0) := "111110110000";
 	constant background_color  : STD_LOGIC_VECTOR (11 downto 0) := "111011011000";
 begin
-	--PB0-LEVEL
-	char1: entity work.draw_char PORT MAP (clk,"010000",160,208,pixel_row,pixel_column,text_out1);
-	char2: entity work.draw_char PORT MAP (clk,"000010",176,208,pixel_row,pixel_column,text_out2);
+	--SW0-LEVEL
+	-- char1: entity work.draw_char PORT MAP (clk,"010000",160,208,pixel_row,pixel_column,text_out1);
+	-- char2: entity work.draw_char PORT MAP (clk,"000010",176,208,pixel_row,pixel_column,text_out2);
+	char1: entity work.draw_char PORT MAP (clk,"010011",160,208,pixel_row,pixel_column,text_out1);
+	char2: entity work.draw_char PORT MAP (clk,"010111",176,208,pixel_row,pixel_column,text_out2);
 	char3: entity work.draw_char PORT MAP (clk,"110000",192,208,pixel_row,pixel_column,text_out3);
 	char4: entity work.draw_char PORT MAP (clk,"101101",208,208,pixel_row,pixel_column,text_out4);
 	char5: entity work.draw_char PORT MAP (clk,"001100",224,208,pixel_row,pixel_column,text_out5);
@@ -57,9 +59,9 @@ begin
 	char8: entity work.draw_char PORT MAP (clk,"000101",272,208,pixel_row,pixel_column,text_out8);
 	char9: entity work.draw_char PORT MAP (clk,"001100",288,208,pixel_row,pixel_column,text_out9);
 
-	--PB1-TRAIN
-	c1: entity work.draw_char PORT MAP (clk,"010000",160,272,pixel_row,pixel_column,t1(0));
-	c2: entity work.draw_char PORT MAP (clk,"000010",176,272,pixel_row,pixel_column,t1(1));
+	--SW1-TRAIN
+	c1: entity work.draw_char PORT MAP (clk,"010011",160,272,pixel_row,pixel_column,t1(0));
+	c2: entity work.draw_char PORT MAP (clk,"010111",176,272,pixel_row,pixel_column,t1(1));
 	c3: entity work.draw_char PORT MAP (clk,"110001",192,272,pixel_row,pixel_column,t1(2));
 	c4: entity work.draw_char PORT MAP (clk,"101101",208,272,pixel_row,pixel_column,t1(3));
 	c5: entity work.draw_char PORT MAP (clk,"010100",224,272,pixel_row,pixel_column,t1(4));
