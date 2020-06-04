@@ -63,6 +63,7 @@ architecture structure of FLAPPY_GAME is
   signal score1, score2                     : std_logic_vector(6 downto 0) := "0000000";
   signal pipe_gap                           : std_logic_vector(9 downto 0) := "0010010000";
   signal pipe_speed                         : std_logic_vector(9 downto 0) := "0000000010";
+  signal bird_rgb                           : std_logic_vector(11 downto 0);
   signal is_train_mode : std_logic;
 
   signal count : integer;
@@ -136,20 +137,6 @@ begin
   --
   -- Game
   --
-
-  -- GAME FSM
-  -- inst_GameFSM: entity work.game_FSM PORT MAP(
-  --   clk_25,
-  --   score,
-  --   game_over_i,
-  --   is_train_mode,
-  --   game_over_i,
-  --   level_complete,
-  --   game_win,
-  --   level_score,
-  --   pipe_gap, pipe_speed
-  -- );
-
   inst_Game_FSM_new: entity work.game_FSM_new PORT MAP(
     clk_25,
     sw(0),sw(1),
@@ -172,6 +159,7 @@ begin
     pipe2_pos,pipe2_height,
     row,column,
     pipe_gap,
+    bird_rgb,
     r_game,g_game,b_game
   );
 
@@ -188,6 +176,14 @@ begin
   );
 
   flap_btn <= pb2 AND (NOT mouse_btnL);
+
+  -- DISPLAY BIRD
+  display_Bird: entity work.disp_bird PORT MAP (
+      clk_25,
+      row, column,
+      bird_height,
+      bird_rgb
+  );
 
   -- PIPE 1
   object_Pipe1: entity work.pipe

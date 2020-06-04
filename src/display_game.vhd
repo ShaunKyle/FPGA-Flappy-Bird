@@ -13,6 +13,7 @@ entity display_game is
 		pipe2_height						: IN STD_LOGIC_VECTOR(9 downto 0);
 		pixel_row, pixel_column				: IN STD_LOGIC_VECTOR(9 downto 0);
 		pipe_gap 							: IN STD_LOGIC_VECTOR(9 downto 0);
+		bird_rgb							: IN STD_LOGIC_VECTOR(11 downto 0);
 		
 		red_out, green_out, blue_out  : OUT STD_LOGIC_VECTOR(3 downto 0)
 	);
@@ -61,19 +62,19 @@ begin
   is_bar   <=  pixel_row > sky_height;
 
   -- Define current pixel color depending on the state of the game
-	red_out <=    bird_color(11 downto 8)  when is_bird=true  						  else
+	red_out <=    bird_rgb(11 downto 8)  when is_bird=true  						  else
 					  grass_color(11 downto 8) when is_grass=true 						  else
 					  bar_color(11 downto 8)   when is_bar=true   						  else
 					  pipe_color(11 downto 8)  when (is_pipe1=true or is_pipe2=true) else
 					  background_color(11 downto 8);
 	
-	green_out <=  bird_color(7 downto 4)   when is_bird=true  						  else
+	green_out <=  bird_rgb(7 downto 4)   when is_bird=true  						  else
 					  grass_color(7 downto 4)  when is_grass=true 						  else
 					  bar_color(7 downto 4)    when is_bar=true   						  else
 					  pipe_color(7 downto 4)   when (is_pipe1=true or is_pipe2=true) else
 				     background_color(7 downto 4);
 	
-	blue_out <=   bird_color(3 downto 0)   when is_bird=true  						  else
+	blue_out <=   bird_rgb(3 downto 0)   when is_bird=true  						  else
 					  grass_color(3 downto 0)  when is_grass=true 						  else
 					  bar_color(3 downto 0)    when is_bar=true   						  else
 					  pipe_color(3 downto 0)   when (is_pipe1=true or is_pipe2=true) else
