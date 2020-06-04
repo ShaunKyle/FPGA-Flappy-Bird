@@ -37,6 +37,7 @@ begin
             else
                 case state is
                     when s0 =>
+                        game_win <= '0';
                         level_complete_o <= '0';
                         if (score = 3) then
                             state <= s1;
@@ -65,18 +66,15 @@ begin
                         if (score = 23) then
                             state <= s4;
                             level_complete_o <= '1';
-                        -- elsif ((collision_flag = '1') and (lives_s > "01")) then
-                        --     lives_s <= lives_s - "01";
-                        --     --state <= s2;
-                        -- elsif ((collision_flag = '1') and (lives_s = "01")) then
-                        --     state <= s3;
                         end if;
 
                     when s3 =>
                         game_over <= '1';
 
                     when s4 =>
+                        level_complete_o <= '0';
                         game_win <= '1';
+                        state <= s0;
                     
                     when s5 =>
                         state <= s0;
