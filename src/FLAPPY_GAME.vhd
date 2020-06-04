@@ -47,7 +47,7 @@ architecture structure of FLAPPY_GAME is
   --signal in_seg0,in_seg1,in_seg2,in_seg3 : std_logic_vector(3 downto 0);
 
 
-  --Game signals
+  --Game signals (datapath)
   signal game_over, game_over_i, game_win   : std_logic := '0';
   signal bird_height 				                : std_logic_vector(9 downto 0);
   signal pipe1_height, pipe1_pos            : std_logic_vector(9 downto 0);
@@ -67,7 +67,7 @@ architecture structure of FLAPPY_GAME is
 
   signal count : integer;
 
-  --Screen signals
+  --Screen signals (datapath)
   signal screen : std_logic_vector(1 downto 0) := "00";
   signal pause : std_logic;
 begin
