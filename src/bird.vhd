@@ -9,7 +9,6 @@ entity bird is
         reset  	    : in std_logic;
         lvl_cmp     : in std_logic;
         left_btn    : in std_logic;
-        lives       : in std_logic_vector(1 downto 0);
         game_start  : out std_logic;
         bird_height : out std_logic_vector(9 downto 0);
         game_over   : out std_logic
