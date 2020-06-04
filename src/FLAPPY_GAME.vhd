@@ -139,14 +139,14 @@ begin
   object_Bird: entity work.bird PORT MAP (
     vert_sync,
     collision,
-    pb2,
+    flap_btn,
     level_complete,
     game_start,
     bird_height,
     game_over
   );
 
-  ---flap_btn <= pb2; --Why is it use AND instead of OR? Whatever.
+  flap_btn <= pb2 AND (NOT mouse_btnL); --Dunno why this works. Just leave it.
 
   -- PIPE 1
   object_Pipe1: entity work.pipe
