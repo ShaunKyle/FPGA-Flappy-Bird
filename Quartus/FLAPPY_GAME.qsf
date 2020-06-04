@@ -113,7 +113,6 @@ set_location_assignment PIN_A14 -to display_tens[3]
 set_location_assignment PIN_C13 -to display_tens[2]
 set_location_assignment PIN_B13 -to display_tens[1]
 set_location_assignment PIN_A13 -to display_tens[0]
-set_global_assignment -name VHDL_FILE ../src/collision_counter.vhd
 set_global_assignment -name VHDL_FILE ../src/interfaces/image_rom.vhd
 set_global_assignment -name VHDL_FILE ../src/draw_big_char.vhd
 set_global_assignment -name VHDL_FILE ../src/game_FSM.vhd
@@ -131,7 +130,6 @@ set_global_assignment -name VHDL_FILE ../src/FLAPPY_GAME.vhd
 set_global_assignment -name VHDL_FILE ../src/display_controller.vhd
 set_global_assignment -name VHDL_FILE ../src/collision.vhd
 set_global_assignment -name VHDL_FILE ../src/bird.vhd
-set_global_assignment -name VHDL_FILE ../src/score.vhd
 set_location_assignment PIN_F14 -to seven_seg2[6]
 set_location_assignment PIN_B17 -to seven_seg2[5]
 set_location_assignment PIN_A17 -to seven_seg2[4]

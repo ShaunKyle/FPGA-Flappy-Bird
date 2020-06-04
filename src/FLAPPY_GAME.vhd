@@ -108,7 +108,7 @@ begin
   inst_ScreenFSM: entity work.screen_FSM PORT MAP(
     Clk, '1',
     game_win,
-    pb0, pb1,
+    sw(0), sw(1),
 
     screen
   );
