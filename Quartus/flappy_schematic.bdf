@@ -19,6 +19,9 @@ Altera or its authorized distributors.  Please refer to the
 applicable agreement for further details.
 */
 (header "graphic" (version "1.4"))
+(properties
+	(page_setup "orientation\n1\npaper_size\n2\npaper_source\n6\nmargin\n1.000:1.000:1.000:1.000\n")
+)
 (pin
 	(input)
 	(rect 1016 848 1184 864)
@@ -184,6 +187,22 @@ applicable agreement for further details.
 	(rect 1024 928 1200 944)
 	(text "OUTPUT" (rect 1 0 39 10)(font "Arial" (font_size 6)))
 	(text "display_ones" (rect 90 0 154 12)(font "Arial" ))
+	(pt 0 8)
+	(drawing
+		(line (pt 0 8)(pt 52 8))
+		(line (pt 52 4)(pt 78 4))
+		(line (pt 52 12)(pt 78 12))
+		(line (pt 52 12)(pt 52 4))
+		(line (pt 78 4)(pt 82 8))
+		(line (pt 82 8)(pt 78 12))
+		(line (pt 78 12)(pt 82 8))
+	)
+)
+(pin
+	(output)
+	(rect 1400 816 1576 832)
+	(text "OUTPUT" (rect 1 0 39 10)(font "Arial" (font_size 6)))
+	(text "output_state1" (rect 90 0 157 12)(font "Arial" ))
 	(pt 0 8)
 	(drawing
 		(line (pt 0 8)(pt 52 8))
@@ -2118,6 +2137,11 @@ applicable agreement for further details.
 	(text "is_train_mode" (rect 1400 824 1468 836)(font "Arial" ))
 	(pt 1400 840)
 	(pt 1424 840)
+)
+(connector
+	(text "resest" (rect 96 888 126 900)(font "Arial" ))
+	(pt 104 904)
+	(pt 96 904)
 )
 (junction (pt 776 424))
 (junction (pt 768 408))
